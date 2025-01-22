@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "fondo.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "fondo.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 264.33333333333337,
+                "y": 1130.6666666666665
+            }
+        },
+        "fondo.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/Ismael/AndroidStudioProjects/MiJuegoFinal/assets/maps",
+    "map.height": 200,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "3",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "map.width": 50,
+    "openFiles": [
+        "fondo.tmx",
+        "fondo.tsx"
+    ],
+    "project": "fondo.tiled-project",
+    "recentFiles": [
+        "fondo.tsx",
+        "fondo.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}
