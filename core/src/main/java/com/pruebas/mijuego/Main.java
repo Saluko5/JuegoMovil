@@ -12,7 +12,7 @@ public class Main extends Game{
     public SpriteBatch batch;
 
     public static final int V_WIDTH = 400; //400
-    public static final int V_HEIGHT = 700; //la altura que quiera
+    public static final int V_HEIGHT = 700; //la altura que quieras
 
     @Override
     public void create() {

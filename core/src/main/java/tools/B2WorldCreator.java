@@ -9,7 +9,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.pruebas.mijuego.ProtaFinal;
+import Sprites.ProtaFinal;
+import Sprites.Suelo;
 
 public class B2WorldCreator {
 
@@ -23,14 +24,7 @@ public class B2WorldCreator {
         for (MapObject object : map.getLayers().get("Suelo").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / ProtaFinal.PPM, (rect.getY() + rect.getHeight() / 2) / ProtaFinal.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2 / ProtaFinal.PPM, rect.getHeight() / 2 / ProtaFinal.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
+            new Suelo(world,map,rect);
         }
     }
 }
