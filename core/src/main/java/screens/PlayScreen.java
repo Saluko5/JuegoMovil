@@ -45,7 +45,9 @@ public class PlayScreen implements Screen {
 
     //Constructor
     public PlayScreen(Main juego){
-        
+
+        atlas = new TextureAtlas("mario.atlas");
+
         this.juego = juego;
 
         //Crea la camara q sigue al marciano
@@ -61,7 +63,7 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         //Creacion del protagonista
-        prota = new ProtaFinal(world);
+        prota = new ProtaFinal(world,this);
 
 
         mapLoader = new TmxMapLoader();
@@ -74,6 +76,9 @@ public class PlayScreen implements Screen {
 
     }
 
+    public TextureAtlas getAtlas(){
+        return atlas;
+    }
 
     @Override
     public void show() {
@@ -81,6 +86,8 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float dt){
+
+        //Moviemiento
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
             prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
         }
@@ -99,6 +106,8 @@ public class PlayScreen implements Screen {
 
         gamecam.update();
 
+        //prota.update(dt);
+
         //rederizar el mapa del juego
         renderer.setView(gamecam);
 
@@ -114,10 +123,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(delta);
 
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
         renderer.render();
@@ -126,6 +135,9 @@ public class PlayScreen implements Screen {
         b2dr.render(world,gamecam.combined);
 
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        juego.batch.begin();
+        prota.draw(juego.batch);
+        juego.batch.end();
         hud.stage.draw();
 
     }
