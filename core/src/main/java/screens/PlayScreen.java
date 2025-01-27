@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -16,10 +15,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
+
+import Sprites.PlataformaNormal;
 import Sprites.ProtaFinal;
 
 import scenes.Hud;
 import tools.B2WorldCreator;
+import tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
 
@@ -39,6 +41,8 @@ public class PlayScreen implements Screen {
     private float altidudMax = 350;
 
     private TextureAtlas atlas;
+
+    private WorldContactListener contacto;
 
 
 
@@ -65,6 +69,9 @@ public class PlayScreen implements Screen {
         //Creacion del protagonista
         prota = new ProtaFinal(world,this);
 
+        //Para crear mas plataformas normales
+        PlataformaNormal plataforma = new PlataformaNormal(world,this);
+
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/fondo.tmx");
@@ -73,6 +80,11 @@ public class PlayScreen implements Screen {
 
         //Creacion del mundo
         new B2WorldCreator(world,map);
+
+        //Tutorial 12
+        contacto = new WorldContactListener();
+        world.setContactListener(contacto);
+         //---------
 
     }
 
@@ -88,8 +100,8 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt){
 
         //Moviemiento
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-            prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
+        if (contacto.contacto){
+            //prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2){
             prota.b2body.applyLinearImpulse(new Vector2(0.1f,0),prota.b2body.getWorldCenter(),true);
@@ -106,7 +118,7 @@ public class PlayScreen implements Screen {
 
         gamecam.update();
 
-        //prota.update(dt);
+        prota.update(dt);
 
         //rederizar el mapa del juego
         renderer.setView(gamecam);
