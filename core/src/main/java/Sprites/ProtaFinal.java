@@ -46,10 +46,9 @@ public class ProtaFinal extends Sprite {
 
         // Hacemos q aparezca en la posicion 0,0 con un tamaño 16 16 pixeles escalado al
         // tamaño del juego
-        setBounds(0, 0, 50, 140);
+        setBounds(0, 0, 70  /PPM, 140 /PPM);
 
         // Asociamos la region con la region de textura protadepie
-        setRegion(protadepie);
     }
 
     public void update(float dt) {
@@ -62,7 +61,8 @@ public class ProtaFinal extends Sprite {
         // Aquí restamos la mitad de la altura del sprite para que esté alineado
         // La posición Y en Box2D está en el centro, por lo que restamos la mitad de la
         // altura del sprite
-        setPosition(posX - getWidth() / 2, posY - getHeight() / 2);
+        setPosition((b2body.getPosition().x -0.125f) - getWidth() / 2, (b2body.getPosition().y - 0.1f) - getHeight() / 2);
+        setRegion(protadepie); 
     }
 
     public void defineProta() {

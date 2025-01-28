@@ -34,7 +34,7 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-    //Box2d variables
+    // Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
     private ProtaFinal prota;
@@ -44,41 +44,37 @@ public class PlayScreen implements Screen {
 
     private WorldContactListener contacto;
 
-
-
-
-    //Constructor
-    public PlayScreen(Main juego){
+    // Constructor
+    public PlayScreen(Main juego) {
 
         atlas = new TextureAtlas("mario.atlas");
 
         this.juego = juego;
 
-        //Crea la camara q sigue al marciano
+        // Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
 
-        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM,Main.V_HEIGHT/ ProtaFinal.PPM,gamecam);
+        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
 
-        //Sirve para el hud del tiempo y el nivel
+        // Sirve para el hud del tiempo y el nivel
         hud = new Hud(juego.batch);
 
-        //Creacion del mundo
-        world = new World(new Vector2(0,-10),true);
+        // Creacion del mundo
+        world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        //Creacion del protagonista
+        // Creacion del protagonista
         prota = new ProtaFinal(this);
 
-        //Para crear mas plataformas normales
-        PlataformaNormal plataforma = new PlataformaNormal(world,this);
-
+        // Para crear mas plataformas normales
+        PlataformaNormal plataforma = new PlataformaNormal(world, this);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/fondo.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1/ ProtaFinal.PPM);
-        gamecam.position.set(gamePort.getWorldWidth() / 2,gamePort.getWorldHeight() / 2,0);
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / ProtaFinal.PPM);
+        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        //Creacion del mundo
+        // Creacion del mundo
         new B2WorldCreator(this);
 
         contacto = new WorldContactListener();
@@ -86,7 +82,7 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TextureAtlas getAtlas(){
+    public TextureAtlas getAtlas() {
         return atlas;
     }
 
@@ -95,33 +91,33 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void handleInput(float dt){
+    public void handleInput(float dt) {
 
-        //Moviemiento
-        if (contacto.contacto){
-            prota.b2body.applyLinearImpulse(new Vector2(0,3f),prota.b2body.getWorldCenter(),true);
+        // Moviemiento
+        if (contacto.contacto) {
+            prota.b2body.applyLinearImpulse(new Vector2(0, 3f), prota.b2body.getWorldCenter(), true);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2){
-            prota.b2body.applyLinearImpulse(new Vector2(0.1f,0),prota.b2body.getWorldCenter(),true);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2) {
+            prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0), prota.b2body.getWorldCenter(), true);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && prota.b2body.getLinearVelocity().x >= -2){
-            prota.b2body.applyLinearImpulse(new Vector2(-0.1f,0),prota.b2body.getWorldCenter(),true);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && prota.b2body.getLinearVelocity().x >= -2) {
+            prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), prota.b2body.getWorldCenter(), true);
         }
     }
 
-    public void update(float dt){
+    public void update(float dt) {
         handleInput(dt);
 
-        world.step(1/60f,6,2);
+        world.step(1 / 60f, 6, 2);
 
         gamecam.update();
 
         prota.update(dt);
 
-        //rederizar el mapa del juego
+        // rederizar el mapa del juego
         renderer.setView(gamecam);
 
-        if (prota.b2body.getPosition().y > altidudMax/ ProtaFinal.PPM){
+        if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM) {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
         }
@@ -131,28 +127,27 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         renderer.render();
 
-        //Para renderizar las colisiones del mapa y del personaje
-        b2dr.render(world,gamecam.combined);
+        // Para renderizar las colisiones del mapa y del personaje
+        b2dr.render(world, gamecam.combined);
 
         juego.batch.setProjectionMatrix(gamecam.combined);
-        juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-
         juego.batch.begin();
         prota.draw(juego.batch);
         juego.batch.end();
+        juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+
         hud.stage.draw();
 
     }
 
     @Override
     public void resize(int width, int height) {
-        gamePort.update(width,height);
+        gamePort.update(width, height);
 
     }
 
@@ -161,14 +156,13 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TiledMap getMap(){
+    public TiledMap getMap() {
         return map;
     }
 
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
-
 
     @Override
     public void resume() {
