@@ -20,9 +20,9 @@ public class ProtaFinal extends Sprite {
     public static final float PPM = 100;
     private TextureRegion protadepie;
 
-    public ProtaFinal(World world, PlayScreen screen){
+    public ProtaFinal(PlayScreen screen){
         super(screen.getAtlas().findRegion("mario"));
-        this.world = world;
+        this.world = screen.getWorld();
         defineProta();
 
         //hace q la region de textura sea la textura del punto 0,0 con 16 pixeles de alto y ancho, osea q en la textura llamada Prota_Salto coja los pixeles
@@ -55,7 +55,7 @@ public class ProtaFinal extends Sprite {
 
         //Ahora creare la linea q hara de sensor para saber si lo que esta esta tocando es el suelo, una plataforma normal, una plataforma movil etc
         EdgeShape pies = new EdgeShape();
-        pies.set(new Vector2(-2 / ProtaFinal.PPM,20 / ProtaFinal.PPM),new Vector2(2 / ProtaFinal.PPM,20 /ProtaFinal.PPM));
+        pies.set(new Vector2(-2 / ProtaFinal.PPM,-20 / ProtaFinal.PPM),new Vector2(2 / ProtaFinal.PPM,-20 /ProtaFinal.PPM));
         fdef.shape = pies;
         fdef.isSensor = true;
 

@@ -67,7 +67,7 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         //Creacion del protagonista
-        prota = new ProtaFinal(world,this);
+        prota = new ProtaFinal(this);
 
         //Para crear mas plataformas normales
         PlataformaNormal plataforma = new PlataformaNormal(world,this);
@@ -79,7 +79,7 @@ public class PlayScreen implements Screen {
         gamecam.position.set(gamePort.getWorldWidth() / 2,gamePort.getWorldHeight() / 2,0);
 
         //Creacion del mundo
-        new B2WorldCreator(world,map);
+        new B2WorldCreator(this);
 
         //Tutorial 12
         contacto = new WorldContactListener();
@@ -101,7 +101,7 @@ public class PlayScreen implements Screen {
 
         //Moviemiento
         if (contacto.contacto){
-            //prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
+            prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2){
             prota.b2body.applyLinearImpulse(new Vector2(0.1f,0),prota.b2body.getWorldCenter(),true);
@@ -127,7 +127,6 @@ public class PlayScreen implements Screen {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
         }
-        //gamecam.position.x = prota.b2body.getPosition().x;
 
         //renderizar el BOX2DDebugLines
         b2dr.render(world,gamecam.combined);
@@ -164,6 +163,15 @@ public class PlayScreen implements Screen {
     public void pause() {
 
     }
+
+    public TiledMap getMap(){
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
 
     @Override
     public void resume() {
