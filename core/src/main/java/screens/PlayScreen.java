@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
         //Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
 
-        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM,Main.V_HEIGHT/ ProtaFinal.PPM,gamecam); //esto se puede cambiar
+        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM,Main.V_HEIGHT/ ProtaFinal.PPM,gamecam);
 
         //Sirve para el hud del tiempo y el nivel
         hud = new Hud(juego.batch);
@@ -81,10 +81,8 @@ public class PlayScreen implements Screen {
         //Creacion del mundo
         new B2WorldCreator(this);
 
-        //Tutorial 12
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
-         //---------
 
     }
 
@@ -101,7 +99,7 @@ public class PlayScreen implements Screen {
 
         //Moviemiento
         if (contacto.contacto){
-            prota.b2body.applyLinearImpulse(new Vector2(0,4f),prota.b2body.getWorldCenter(),true);
+            prota.b2body.applyLinearImpulse(new Vector2(0,3f),prota.b2body.getWorldCenter(),true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2){
             prota.b2body.applyLinearImpulse(new Vector2(0.1f,0),prota.b2body.getWorldCenter(),true);
@@ -127,9 +125,6 @@ public class PlayScreen implements Screen {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
         }
-
-        //renderizar el BOX2DDebugLines
-        b2dr.render(world,gamecam.combined);
     }
 
     @Override
@@ -145,7 +140,9 @@ public class PlayScreen implements Screen {
         //Para renderizar las colisiones del mapa y del personaje
         b2dr.render(world,gamecam.combined);
 
+        juego.batch.setProjectionMatrix(gamecam.combined);
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+
         juego.batch.begin();
         prota.draw(juego.batch);
         juego.batch.end();

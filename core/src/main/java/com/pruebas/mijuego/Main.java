@@ -13,6 +13,10 @@ public class Main extends Game{
 
     public static final int V_WIDTH = 400; //400
     public static final int V_HEIGHT = 700; //la altura que quieras
+    public static final short DEFAULT_BIT = 1;
+    public static final short PROTA_BIT = 2;
+    public static final short PLATAFORMA_BIT = 4;
+
 
     @Override
     public void create() {

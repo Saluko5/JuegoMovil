@@ -41,7 +41,7 @@ public class PlataformaNormal extends Sprite {
         BodyDef bdef = new BodyDef();
 
         //Ponemos la posicion del "cuerpo" de lo plataforma
-        bdef.position.set(100/ ProtaFinal.PPM,120/ ProtaFinal.PPM);
+        bdef.position.set(100/ ProtaFinal.PPM,200/ ProtaFinal.PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
 
