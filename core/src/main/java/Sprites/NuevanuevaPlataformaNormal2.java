@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.pruebas.mijuego.Main;
 
 import screens.PlayScreen;
 
@@ -27,6 +28,8 @@ public class NuevanuevaPlataformaNormal2 extends NuevaPlataformaNormal{
         PolygonShape shape = new PolygonShape();
         //Y con esto le damos el tamaño
         shape.setAsBox(60/ProtaFinal.PPM,10/ ProtaFinal.PPM); //esta a 20
+        fdef.filter.categoryBits = Main.PLATAFORMA_BIT;
+        fdef.filter.maskBits = Main.TIERRA_BIT | Main.PROTA_BIT | Main.PLATAFORMA_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
