@@ -49,15 +49,15 @@ public class ProtaFinal extends Sprite {
         // hace q la region de textura sea la textura del punto 0,0 con 16 pixeles de
         // alto y ancho, osea q en la textura llamada Prota_Salto coja los pixeles
         // del punto 0,0 con el tamaño anteriormente dicho
-        protadepie = new TextureRegion(getTexture(), 50, 0, 90, 180);
+        protadepie = new TextureRegion(getTexture(), 50, 40, 90, 140);
 
         // Hacemos q aparezca en la posicion 0,0 con un tamaño 16 16 pixeles escalado al
         // tamaño del juego
-        setBounds(0, 0, 80 / PPM, 100 / PPM);
+        setBounds(0, 0, 40 / PPM, 70 / PPM);
 
         // Ahora lo hago para el frame del protagonista saltando
-        protasaltando = new TextureRegion(getTexture(), 190, 0, 150, 300);
-        setBounds(0, 0, 20 / PPM, 80 / PPM);
+        protasaltando = new TextureRegion(new Texture("plataformalvl1.png"), 245, 40, 90, 140);
+        setBounds(0, 0, 40 / PPM, 70 / PPM);
 
         // Asociamos la region con la region de textura protasaltando
     }
@@ -112,7 +112,7 @@ public class ProtaFinal extends Sprite {
         // altura del sprite
         setPosition((b2body.getPosition().x) - getWidth() / 2,
                 (b2body.getPosition().y + 0.1f) - getHeight() / 2);
-        //setRegion(protadepie);
+        // setRegion(protadepie);
 
         setRegion(getFrame(dt));
     }
@@ -127,7 +127,7 @@ public class ProtaFinal extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(20 / ProtaFinal.PPM); // esta a 20
         fdef.filter.categoryBits = Main.PROTA_BIT;
-        fdef.filter.maskBits = Main.TIERRA_BIT | Main.PLATAFORMA_BIT;
+        fdef.filter.maskBits = Main.TIERRA_BIT | Main.PLATAFORMA_BIT | Main.LINEADENUBE_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

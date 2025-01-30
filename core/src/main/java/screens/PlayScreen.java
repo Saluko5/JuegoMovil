@@ -16,7 +16,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
+import Sprites.NuevanuevaPlataformaNormal2;
 import Sprites.PlataformaNormal;
+import Sprites.PlataformaNube;
 import Sprites.ProtaFinal;
 
 import scenes.Hud;
@@ -38,6 +40,8 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private ProtaFinal prota;
+    private NuevanuevaPlataformaNormal2 plataformanormal;
+    private PlataformaNube plataformaNube;
     private float altidudMax = 350;
 
     private TextureAtlas atlas;
@@ -66,9 +70,6 @@ public class PlayScreen implements Screen {
         // Creacion del protagonista
         prota = new ProtaFinal(this);
 
-        // Para crear mas plataformas normales
-        PlataformaNormal plataforma = new PlataformaNormal(world, this);
-
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/fondo.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / ProtaFinal.PPM);
@@ -80,6 +81,8 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
+        plataformaNube = new PlataformaNube(this, 300f, 350f);
+        //plataformanormal = new NuevanuevaPlataformaNormal2(this, 200f, 300f);
     }
 
     public TextureAtlas getAtlas() {
@@ -113,6 +116,7 @@ public class PlayScreen implements Screen {
         gamecam.update();
 
         prota.update(dt);
+        // plataformanormal.update(dt);
 
         // rederizar el mapa del juego
         renderer.setView(gamecam);
@@ -138,6 +142,7 @@ public class PlayScreen implements Screen {
         juego.batch.setProjectionMatrix(gamecam.combined);
         juego.batch.begin();
         prota.draw(juego.batch);
+        // plataformanormal.draw(juego.batch);
         juego.batch.end();
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 

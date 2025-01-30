@@ -16,6 +16,7 @@ public abstract class NuevaPlataformaNormal extends Sprite {
         this.screen = screen;
         this.world = screen.getWorld();
         setPosition(x,y);
+        definePlataforma();
     }
 
     protected abstract void definePlataforma();

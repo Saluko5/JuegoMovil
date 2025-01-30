@@ -21,6 +21,8 @@ public class WorldContactListener implements ContactListener {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
+        int cDef = fixA.getFilterData().categoryBits |fixB.getFilterData().categoryBits;
+
         //Como no sabemos cual de los dos accesorio es nuestro palo sensor pies
         //lo que hacemos es q si alguno de los lo es entre en el if
         if (fixA.getUserData() == "pies" || fixB.getUserData() == "pies"){

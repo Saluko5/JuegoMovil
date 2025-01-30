@@ -16,6 +16,7 @@ public class Main extends Game{
     public static final short TIERRA_BIT = 1;
     public static final short PROTA_BIT = 2;
     public static final short PLATAFORMA_BIT = 4;
+    public static final short LINEADENUBE_BIT = 8;
 
 
     @Override
