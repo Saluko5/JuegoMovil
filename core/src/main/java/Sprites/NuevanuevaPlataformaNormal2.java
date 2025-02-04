@@ -2,6 +2,7 @@ package Sprites;
 
 import org.w3c.dom.Text;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +21,8 @@ public class NuevanuevaPlataformaNormal2 extends NuevaPlataformaNormal {
 
     public NuevanuevaPlataformaNormal2(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        //moverse = new Animation<>(0.4f, new TextureRegion("ProtaSalto.png"),0,0,100,100);
+        // moverse = new Animation<>(0.4f, new
+        // TextureRegion("ProtaSalto.png"),0,0,100,100);
     }
 
     @Override
@@ -46,10 +48,16 @@ public class NuevanuevaPlataformaNormal2 extends NuevaPlataformaNormal {
 
     }
 
+    @Override
+    public void pisada() {
+        Gdx.app.log("plataforma", "");
+    }
+
     public void update(float dt) {
 
-        //setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        //setRegion(plataformasprite);
+        // setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y -
+        // getHeight() / 2);
+        // setRegion(plataformasprite);
 
     }
 }

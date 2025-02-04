@@ -51,12 +51,12 @@ public class ProtaFinal extends Sprite {
         // del punto 0,0 con el tamaño anteriormente dicho
         protadepie = new TextureRegion(getTexture(), 50, 40, 90, 140);
 
-        // Hacemos q aparezca en la posicion 0,0 con un tamaño 16 16 pixeles escalado al
+        // Hacemos q aparezca en la posicion 0,0 con un tamaño 40 40 pixeles escalado al
         // tamaño del juego
         setBounds(0, 0, 40 / PPM, 70 / PPM);
 
         // Ahora lo hago para el frame del protagonista saltando
-        protasaltando = new TextureRegion(new Texture("plataformalvl1.png"), 245, 40, 90, 140);
+        protasaltando = new TextureRegion(new Texture("ProtaSaltoMejorado.png"), 245, 40, 90, 140);
         setBounds(0, 0, 40 / PPM, 70 / PPM);
 
         // Asociamos la region con la region de textura protasaltando

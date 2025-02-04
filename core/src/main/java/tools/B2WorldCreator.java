@@ -24,11 +24,11 @@ public class B2WorldCreator {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        //Crear la colision de la "tierra"
+        // Crear la colision de la "tierra"
         for (MapObject object : map.getLayers().get("Suelo").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Suelo(screen,rect);
+            new Suelo(screen, rect);
         }
     }
 }

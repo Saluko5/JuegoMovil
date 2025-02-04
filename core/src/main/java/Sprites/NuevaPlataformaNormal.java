@@ -20,5 +20,5 @@ public abstract class NuevaPlataformaNormal extends Sprite {
     }
 
     protected abstract void definePlataforma();
-
+    public abstract void pisada();
 }
