@@ -1,5 +1,8 @@
 package screens;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -16,10 +19,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
-import Sprites.NuevanuevaPlataformaNormal2;
 import Sprites.PlataformaNormal;
 import Sprites.PlataformaNube;
-import Sprites.PlataformaNubeDefinitiva;
 import Sprites.ProtaFinal;
 
 import scenes.Hud;
@@ -41,13 +42,14 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private ProtaFinal prota;
-    private PlataformaNube plataformaNube;
-    private PlataformaNubeDefinitiva plataforma;
     private float altidudMax = 350;
+    private Random rdm = new Random();
 
     private TextureAtlas atlas;
 
     private WorldContactListener contacto;
+    private ArrayList<PlataformaNormal> plataformas = new ArrayList<>();
+    private ArrayList<PlataformaNube> plataformasnube = new ArrayList<>();
 
     // Constructor
     public PlayScreen(Main juego) {
@@ -82,8 +84,41 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        // plataformaNube = new PlataformaNube(this, 300f, 650f);
-        plataforma = new PlataformaNubeDefinitiva(this, 600f, 650f);
+        int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        plataformas.add(new PlataformaNormal(this, x, 200)); // primer y 200
+        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        plataformas.add(new PlataformaNormal(this, x, 450)); // primer y 200
+        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        plataformas.add(new PlataformaNormal(this, x, 700)); // primer y 200
+        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        plataformas.add(new PlataformaNormal(this, x, 950)); // primer y 200
+        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        plataformas.add(new PlataformaNormal(this, x, 1200)); // primer y 200
+
+        // -------------------------
+        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, 200)); // primer y 200
+        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, 450)); // primer y 200
+        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, 700)); // primer y 200
+        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, 950)); // primer y 200
+        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, 1200)); // primer y 200
+
+        /*
+         * for (int i = 0; i < 15; i++) {
+         * int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+         * int y = 200;
+         * plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
+         * Gdx.app.log("Llegue: " + y, "");
+         * y = y + 200;
+         * }
+         */
+
+        // plataformaNube = new PlataformaNube(this, 100f, 100f);
+        // plataformaNormal = new PlataformaNormal(this, 300f, 200f);
     }
 
     public TextureAtlas getAtlas() {
@@ -99,7 +134,7 @@ public class PlayScreen implements Screen {
 
         // Moviemiento
         if (contacto.contacto) {
-            prota.b2body.applyLinearImpulse(new Vector2(0, 3f), prota.b2body.getWorldCenter(), true);
+            prota.b2body.applyLinearImpulse(new Vector2(0, 4f), prota.b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2) {
             prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0), prota.b2body.getWorldCenter(), true);
@@ -117,7 +152,15 @@ public class PlayScreen implements Screen {
         gamecam.update();
 
         prota.update(dt);
-        // plataformaNube.update(dt);
+
+        for (int i = 0; i < plataformas.size(); i++) {
+            plataformas.get(i).update(dt);
+        }
+
+        // ---------------
+        // for (int i = 0; i < plataformasnube.size(); i++) {
+        // plataformasnube.get(i).update(dt);
+        // }
 
         // rederizar el mapa del juego
         renderer.setView(gamecam);
@@ -143,8 +186,15 @@ public class PlayScreen implements Screen {
         juego.batch.setProjectionMatrix(gamecam.combined);
         juego.batch.begin();
         prota.draw(juego.batch);
-        plataforma.draw(juego.batch);
-        // plataformanormal.draw(juego.batch);
+
+        for (int i = 0; i < plataformas.size(); i++) {
+            plataformas.get(i).draw(juego.batch);
+        }
+
+        // ----
+        // for (int i = 0; i < plataformasnube.size(); i++) {
+        // plataformasnube.get(i).draw(juego.batch);
+        // }
         juego.batch.end();
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 

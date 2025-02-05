@@ -1,17 +1,14 @@
 package tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.pruebas.mijuego.Main;
 
 import Sprites.InteractiveTileObject;
-import Sprites.NuevaPlataformaNormal;
-import Sprites.NuevanuevaPlataformaNormal2;
+import Sprites.PlataformaNube;
 
 public class WorldContactListener implements ContactListener {
 
@@ -36,20 +33,20 @@ public class WorldContactListener implements ContactListener {
 
             // si el accesorio object es diferente a null y si el objecto obtiene datos del
             // usuario
+        contacto = true;
             if (object.getUserData() != null
                     && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
                 ((InteractiveTileObject) object.getUserData()).golpePies();
             }
         }
-        contacto = true;
 
         switch (cDef) {
             case Main.PLATAFORMA_BIT | Main.PROTA_BIT:
                 // Si el primero cuerpo de la colision es la plataforma
                 if (fixA.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
-                    ((NuevaPlataformaNormal) fixA.getUserData()).pisada();
+                    ((PlataformaNube) fixA.getUserData()).pisada();
                 } else if (fixB.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
-                    ((NuevaPlataformaNormal) fixB.getUserData()).pisada();
+                    ((PlataformaNube) fixB.getUserData()).pisada();
                 }
                 break;
         }
