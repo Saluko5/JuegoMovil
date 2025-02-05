@@ -37,12 +37,14 @@ public class PlayScreen implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private boolean muerto = false;
 
     // Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
     private ProtaFinal prota;
     private float altidudMax = 350;
+    public float altitudMin = 0;
     private Random rdm = new Random();
 
     private TextureAtlas atlas;
@@ -64,7 +66,7 @@ public class PlayScreen implements Screen {
         gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
 
         // Sirve para el hud del tiempo y el nivel
-        hud = new Hud(juego.batch);
+        hud = new Hud(juego.batch, altitudMin);
 
         // Creacion del mundo
         world = new World(new Vector2(0, -10), true);
@@ -84,16 +86,12 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        plataformas.add(new PlataformaNormal(this, x, 200)); // primer y 200
-        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        plataformas.add(new PlataformaNormal(this, x, 450)); // primer y 200
-        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        plataformas.add(new PlataformaNormal(this, x, 700)); // primer y 200
-        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        plataformas.add(new PlataformaNormal(this, x, 950)); // primer y 200
-        x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        plataformas.add(new PlataformaNormal(this, x, 1200)); // primer y 200
+        int y = 200;
+        for (int i = 0; i < 20; i++) {
+            int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+            plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
+            y += 250;
+        }
 
         // -------------------------
         // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
@@ -107,18 +105,6 @@ public class PlayScreen implements Screen {
         // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
         // plataformasnube.add(new PlataformaNube(this, x, 1200)); // primer y 200
 
-        /*
-         * for (int i = 0; i < 15; i++) {
-         * int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-         * int y = 200;
-         * plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
-         * Gdx.app.log("Llegue: " + y, "");
-         * y = y + 200;
-         * }
-         */
-
-        // plataformaNube = new PlataformaNube(this, 100f, 100f);
-        // plataformaNormal = new PlataformaNormal(this, 300f, 200f);
     }
 
     public TextureAtlas getAtlas() {
@@ -133,14 +119,16 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt) {
 
         // Moviemiento
-        if (contacto.contacto) {
-            prota.b2body.applyLinearImpulse(new Vector2(0, 4f), prota.b2body.getWorldCenter(), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2) {
-            prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0), prota.b2body.getWorldCenter(), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && prota.b2body.getLinearVelocity().x >= -2) {
-            prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), prota.b2body.getWorldCenter(), true);
+        if (!muerto) {
+            if (contacto.contacto) {
+                prota.b2body.applyLinearImpulse(new Vector2(0, 4f), prota.b2body.getWorldCenter(), true);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2) {
+                prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0), prota.b2body.getWorldCenter(), true);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && prota.b2body.getLinearVelocity().x >= -2) {
+                prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), prota.b2body.getWorldCenter(), true);
+            }
         }
     }
 
@@ -165,10 +153,16 @@ public class PlayScreen implements Screen {
         // rederizar el mapa del juego
         renderer.setView(gamecam);
 
-        if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM) {
+        if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM && !muerto) {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
+            altitudMin = (prota.b2body.getPosition().y * ProtaFinal.PPM) - 350;
+            hud.ActualizarPuntuacion(altitudMin);
         }
+        if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
+            muerto = true;
+        }
+
     }
 
     @Override
@@ -199,6 +193,11 @@ public class PlayScreen implements Screen {
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();
+
+        if (muerto) {
+            juego.setScreen(new GameOverScreen(juego));
+            dispose();
+        }
 
     }
 

@@ -28,7 +28,7 @@ public class PlataformaNube extends Sprite {
     float y;
 
     public PlataformaNube(PlayScreen screen, float x, float y) {
-        super(new Texture("plataformalvl1.png"), 250, 200);
+        super(new Texture("aaaa.png"), 250, 200);
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
@@ -37,7 +37,7 @@ public class PlataformaNube extends Sprite {
         definePlataforma();
 
         plataformacuerpo = new TextureRegion(getTexture(), 15, 84, 225, 32);
-        setBounds(0.1f, 0.1f, 120 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
+        setBounds(0.1f, 0.1f, 60 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
         setRegion(plataformacuerpo);
 
         setToDestroy = false;
@@ -56,7 +56,7 @@ public class PlataformaNube extends Sprite {
         // Con esto le damos la forma al "cuerpo"
         PolygonShape shape = new PolygonShape();
         // Y con esto le damos el tamaño
-        shape.setAsBox(60 / ProtaFinal.PPM, 10 / ProtaFinal.PPM); // esta a 20
+        shape.setAsBox(30 / ProtaFinal.PPM, 10 / ProtaFinal.PPM); // esta a 20
         fdef.filter.categoryBits = Main.LINEADENUBE_BIT;
         // fdef.filter.maskBits = Main.TIERRA_BIT | Main.PROTA_BIT |
         // Main.PLATAFORMA_BIT;
@@ -67,10 +67,10 @@ public class PlataformaNube extends Sprite {
         // Creacion de la linea para la colision de desaparicion
         PolygonShape linea = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-58, 10).scl(1 / ProtaFinal.PPM);
-        vertice[1] = new Vector2(58, 10).scl(1 / ProtaFinal.PPM);
-        vertice[2] = new Vector2(-58, 0).scl(1 / ProtaFinal.PPM);
-        vertice[3] = new Vector2(58, 0).scl(1 / ProtaFinal.PPM);
+        vertice[0] = new Vector2(-29, 10).scl(1 / ProtaFinal.PPM);
+        vertice[1] = new Vector2(29, 10).scl(1 / ProtaFinal.PPM);
+        vertice[2] = new Vector2(-29, 0).scl(1 / ProtaFinal.PPM);
+        vertice[3] = new Vector2(29, 0).scl(1 / ProtaFinal.PPM);
         linea.set(vertice);
 
         fdef.shape = linea;

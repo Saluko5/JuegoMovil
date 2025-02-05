@@ -21,7 +21,7 @@ import screens.PlayScreen;
 
 public class ProtaFinal extends Sprite {
     public enum estado {
-        SALTANDO, DEPIE
+        SALTANDO, DEPIE, MUERTO
     };
 
     public estado estadoactual;
