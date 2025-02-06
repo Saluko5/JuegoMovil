@@ -33,7 +33,7 @@ public class WorldContactListener implements ContactListener {
 
             // si el accesorio object es diferente a null y si el objecto obtiene datos del
             // usuario
-        contacto = true;
+            contacto = true;
             if (object.getUserData() != null
                     && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
                 ((InteractiveTileObject) object.getUserData()).golpePies();
@@ -45,6 +45,7 @@ public class WorldContactListener implements ContactListener {
                 // Si el primero cuerpo de la colision es la plataforma
                 if (fixA.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
                     ((PlataformaNube) fixA.getUserData()).pisada();
+                    
                 } else if (fixB.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
                     ((PlataformaNube) fixB.getUserData()).pisada();
                 }

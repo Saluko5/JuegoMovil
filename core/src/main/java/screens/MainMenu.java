@@ -4,29 +4,139 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
 import Sprites.ProtaFinal;
 
 public class MainMenu implements Screen {
 
+    private Viewport viewport;
+    private Stage stage;
     Main juego;
     Texture botonJugar;
     TextureRegion fondo;
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
-    TextureRegion fondomenu;
+    PlayScreen screen;
 
-    public MainMenu(Main juego) {
+    private Texture backgroundTexture; // Añadido para la imagen de fondo
+    private Image backgroundImage;
+
+    // Creacion de boton jugar
+    private Texture TexturaBtnJugar;
+    private TextureRegion BtnJugarRegion;
+    private ImageButton BotonJugar;
+
+    // Creacion del boton options
+    private Texture TexturaBtnOptions;
+    private TextureRegion BtnOptionsRegion;
+    private ImageButton BotonOptions;
+
+    // Creacion del boton Salir
+    private Texture TexturaBtnExit;
+    private TextureRegion BtnExitRegion;
+    private ImageButton BotonExit;
+
+    public MainMenu(Main juego, PlayScreen screen) {
         this.juego = juego;
-        botonJugar = new Texture("plataformalvl1prueba.png");
-        fondomenu = new TextureRegion(botonJugar, 50, 40, 90, 140);
 
+        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        stage = new Stage(viewport, ((Main) juego).batch);
+        this.screen = screen;
+
+        // Creacion del fondo del menu
+        backgroundTexture = new Texture(Gdx.files.internal("plataformalvl1prueba.png")); // Ruta de la imagen de fondo
+        backgroundImage = new Image(backgroundTexture); // Crear el objeto Image para el fondo
+        backgroundImage.setSize(600, 800);
+        backgroundImage.setPosition(0, 0);
+        stage.addActor(backgroundImage); // Añadir la imagen al stage
+
+        // Creacion del boton para jugar
+        TexturaBtnJugar = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        BtnJugarRegion = new TextureRegion(TexturaBtnJugar);
+
+        ImageButton.ImageButtonStyle EstiloBtnJugar = new ImageButton.ImageButtonStyle();
+        EstiloBtnJugar.up = new TextureRegionDrawable(BtnJugarRegion);
+
+        BotonJugar = new ImageButton(EstiloBtnJugar);
+
+        // Posicionar el botón en la pantalla
+        BotonJugar.setPosition(275 - BtnJugarRegion.getRegionWidth() / 2, 500 - BtnJugarRegion.getRegionHeight() / 2);
+        BotonJugar.setSize(100, 100);
+
+        // Añadir un listener al botón para el evento de clic
+        BotonJugar.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.inicio = false;
+                juego.setScreen(new PlayScreen((Main) juego));
+                dispose();
+            }
+        });
+
+        stage.addActor(BotonJugar);
+
+        // Creacion del boton options
+        TexturaBtnOptions = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        BtnOptionsRegion = new TextureRegion(TexturaBtnOptions);
+
+        ImageButton.ImageButtonStyle EstiloBtnOptions = new ImageButton.ImageButtonStyle();
+        EstiloBtnOptions.up = new TextureRegionDrawable(BtnOptionsRegion);
+
+        BotonOptions = new ImageButton(EstiloBtnOptions);
+
+        // Posicionar el botón en la pantalla
+        BotonOptions.setPosition(275 - BtnOptionsRegion.getRegionWidth() / 2,
+                380 - BtnOptionsRegion.getRegionHeight() / 2);
+        BotonOptions.setSize(100, 100);
+
+        // Añadir un listener al botón para el evento de clic
+        BotonOptions.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Boton options");
+            }
+        });
+
+        stage.addActor(BotonOptions);
+
+        // Creacion del boton salir
+        TexturaBtnExit = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        BtnExitRegion = new TextureRegion(TexturaBtnExit);
+
+        ImageButton.ImageButtonStyle EstiloBtnExit = new ImageButton.ImageButtonStyle();
+        EstiloBtnExit.up = new TextureRegionDrawable(BtnExitRegion);
+
+        BotonExit = new ImageButton(EstiloBtnExit);
+
+        // Posicionar el botón en la pantalla
+        BotonExit.setPosition(275 - BtnExitRegion.getRegionWidth() / 2,
+                260 - BtnExitRegion.getRegionHeight() / 2);
+        BotonExit.setSize(100, 100);
+
+        // Añadir un listener al botón para el evento de clic
+        BotonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Boton exit");
+            }
+        });
+
+        stage.addActor(BotonExit);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -38,11 +148,9 @@ public class MainMenu implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        juego.batch.begin();
 
-        juego.batch.draw(botonJugar, 0, 0);
-
-        juego.batch.end();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
 
     }
 

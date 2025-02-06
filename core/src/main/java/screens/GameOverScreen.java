@@ -38,13 +38,16 @@ public class GameOverScreen implements Screen {
     private TextureRegion BtnMenuRegion;
     private ImageButton BotonMenu;
     private Game game;
+    public boolean inicio = false;
+    PlayScreen screen;
 
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
-    public GameOverScreen(Game game) {
+    public GameOverScreen(Game game, PlayScreen screen) {
         this.game = game;
 
+        this.screen = screen;
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
         // ---
@@ -93,7 +96,9 @@ public class GameOverScreen implements Screen {
         BotonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Boton menu");
+               // game.setScreen(new PlayScreen((Main) game));
+               // dispose();
+               System.out.println("Menu");
             }
         });
 

@@ -26,15 +26,17 @@ public class PlataformaNube extends Sprite {
     public boolean contacto;
     float x;
     float y;
+    ProtaFinal prota;
 
     public PlataformaNube(PlayScreen screen, float x, float y) {
-        super(new Texture("aaaa.png"), 250, 200);
+        super(new Texture("plataformalvl1.png"), 250, 200);
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
         this.y = y;
         Gdx.app.log("coordenadas:" + x + "y: " + y, "");
         definePlataforma();
+        prota = screen.prota;
 
         plataformacuerpo = new TextureRegion(getTexture(), 15, 84, 225, 32);
         setBounds(0.1f, 0.1f, 60 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
@@ -74,7 +76,8 @@ public class PlataformaNube extends Sprite {
         linea.set(vertice);
 
         fdef.shape = linea;
-        fdef.restitution = 0.0f; // Con esto hago que cuando salte encima se impulso con la fuerza que marco
+        // fdef.restitution = 1.5f; // Con esto hago que cuando salte encima se impulso
+        // con la fuerza que marco
         fdef.filter.categoryBits = Main.PLATAFORMA_BIT;
         b2body.createFixture(fdef).setUserData(this);
 
@@ -105,6 +108,8 @@ public class PlataformaNube extends Sprite {
     public void pisada() {
         setToDestroy = true;
         Gdx.app.log("plataforma nube", "");
+        // prota.b2body.applyLinearImpulse(new Vector2(0, 14),
+        // prota.b2body.getWorldCenter(), true);
         contacto = true;
     }
 }

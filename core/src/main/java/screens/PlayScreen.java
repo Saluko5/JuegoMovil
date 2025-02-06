@@ -38,11 +38,14 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private boolean muerto = false;
+    public boolean inicio = false;
+
+    // private GameOverScreen gameover;
 
     // Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
-    private ProtaFinal prota;
+    public ProtaFinal prota;
     private float altidudMax = 350;
     public float altitudMin = 0;
     private Random rdm = new Random();
@@ -86,24 +89,21 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        int y = 200;
-        for (int i = 0; i < 20; i++) {
-            int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-            plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
-            y += 250;
-        }
+        // int y = 200;
+        // for (int i = 0; i < 25; i++) {
+        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
+        // y += 250;
+        // }
 
         // -------------------------
-        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, 200)); // primer y 200
-        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, 450)); // primer y 200
-        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, 700)); // primer y 200
-        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, 950)); // primer y 200
-        // x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, 1200)); // primer y 200
+        int y = 200;
+        for (int i = 0; i < 25; i++) {
+            int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+            plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
+            y += 250;
+        }
+        // gameover = new GameOverScreen(juego, this);
 
     }
 
@@ -141,14 +141,14 @@ public class PlayScreen implements Screen {
 
         prota.update(dt);
 
-        for (int i = 0; i < plataformas.size(); i++) {
-            plataformas.get(i).update(dt);
-        }
+        // for (int i = 0; i < plataformas.size(); i++) {
+        // plataformas.get(i).update(dt);
+        // }
 
         // ---------------
-        // for (int i = 0; i < plataformasnube.size(); i++) {
-        // plataformasnube.get(i).update(dt);
-        // }
+        for (int i = 0; i < plataformasnube.size(); i++) {
+            plataformasnube.get(i).update(dt);
+        }
 
         // rederizar el mapa del juego
         renderer.setView(gamecam);
@@ -162,7 +162,13 @@ public class PlayScreen implements Screen {
         if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
             muerto = true;
         }
-
+        /*
+         * if (prota.b2body.getPosition().x < 0) {
+         * prota.setPosition(3.7f, prota.b2body.getPosition().y);
+         * } else if (prota.b2body.getPosition().x > 3.7f) {
+         * prota.setPosition(0f, prota.b2body.getPosition().y);
+         * }
+         */
     }
 
     @Override
@@ -186,16 +192,20 @@ public class PlayScreen implements Screen {
         }
 
         // ----
-        // for (int i = 0; i < plataformasnube.size(); i++) {
-        // plataformasnube.get(i).draw(juego.batch);
-        // }
+        for (int i = 0; i < plataformasnube.size(); i++) {
+            plataformasnube.get(i).draw(juego.batch);
+        }
         juego.batch.end();
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();
 
         if (muerto) {
-            juego.setScreen(new GameOverScreen(juego));
+            juego.setScreen(new GameOverScreen(juego, this));
+            dispose();
+        }
+        if (inicio) {
+            juego.setScreen(new MainMenu(juego, this));
             dispose();
         }
 
