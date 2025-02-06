@@ -38,7 +38,7 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private boolean muerto = false;
-    public boolean inicio = false;
+    public boolean inicio = true;
 
     // private GameOverScreen gameover;
 
@@ -205,7 +205,7 @@ public class PlayScreen implements Screen {
             dispose();
         }
         if (inicio) {
-            juego.setScreen(new MainMenu(juego, this));
+            juego.setScreen(new OptionsScreen(juego));
             dispose();
         }
 

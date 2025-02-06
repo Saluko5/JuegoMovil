@@ -46,8 +46,7 @@ public class GameOverScreen implements Screen {
 
     public GameOverScreen(Game game, PlayScreen screen) {
         this.game = game;
-
-        this.screen = screen;
+        
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
         // ---
