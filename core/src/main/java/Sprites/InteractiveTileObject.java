@@ -44,6 +44,8 @@ public abstract class InteractiveTileObject {
 
     public abstract void golpePies();
 
+    public abstract void golpeCabeza();
+
     public void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;

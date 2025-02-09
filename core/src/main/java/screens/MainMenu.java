@@ -29,7 +29,7 @@ public class MainMenu implements Screen {
     Main juego;
     Texture botonJugar;
     TextureRegion fondo;
-    PlayScreen screen;
+    private boolean jugar = false;
 
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
@@ -49,22 +49,21 @@ public class MainMenu implements Screen {
     private TextureRegion BtnExitRegion;
     private ImageButton BotonExit;
 
-    public MainMenu(Main juego, PlayScreen screen) {
+    public MainMenu(Main juego) {
         this.juego = juego;
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) juego).batch);
-        this.screen = screen;
 
         // Creacion del fondo del menu
-        backgroundTexture = new Texture(Gdx.files.internal("plataformalvl1prueba.png")); // Ruta de la imagen de fondo
+        backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
         backgroundImage = new Image(backgroundTexture); // Crear el objeto Image para el fondo
         backgroundImage.setSize(600, 800);
         backgroundImage.setPosition(0, 0);
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Creacion del boton para jugar
-        TexturaBtnJugar = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        TexturaBtnJugar = new Texture(Gdx.files.internal("BotonJugar.png"));
         BtnJugarRegion = new TextureRegion(TexturaBtnJugar);
 
         ImageButton.ImageButtonStyle EstiloBtnJugar = new ImageButton.ImageButtonStyle();
@@ -73,15 +72,14 @@ public class MainMenu implements Screen {
         BotonJugar = new ImageButton(EstiloBtnJugar);
 
         // Posicionar el botón en la pantalla
-        BotonJugar.setPosition(275 - BtnJugarRegion.getRegionWidth() / 2, 500 - BtnJugarRegion.getRegionHeight() / 2);
+        BotonJugar.setPosition(150, 370);
         BotonJugar.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonJugar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                screen.inicio = false;
-                juego.setScreen(new PlayScreen((Main) juego));
+                juego.setScreen(new PlayScreen(juego));
                 dispose();
             }
         });
@@ -89,7 +87,7 @@ public class MainMenu implements Screen {
         stage.addActor(BotonJugar);
 
         // Creacion del boton options
-        TexturaBtnOptions = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        TexturaBtnOptions = new Texture(Gdx.files.internal("BotonOptions.png"));
         BtnOptionsRegion = new TextureRegion(TexturaBtnOptions);
 
         ImageButton.ImageButtonStyle EstiloBtnOptions = new ImageButton.ImageButtonStyle();
@@ -98,22 +96,22 @@ public class MainMenu implements Screen {
         BotonOptions = new ImageButton(EstiloBtnOptions);
 
         // Posicionar el botón en la pantalla
-        BotonOptions.setPosition(275 - BtnOptionsRegion.getRegionWidth() / 2,
-                380 - BtnOptionsRegion.getRegionHeight() / 2);
+        BotonOptions.setPosition(150, 250);
         BotonOptions.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonOptions.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Boton options");
+                juego.setScreen(new OptionsScreen(juego));
+                dispose();
             }
         });
 
         stage.addActor(BotonOptions);
 
         // Creacion del boton salir
-        TexturaBtnExit = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        TexturaBtnExit = new Texture(Gdx.files.internal("BotonExit.png"));
         BtnExitRegion = new TextureRegion(TexturaBtnExit);
 
         ImageButton.ImageButtonStyle EstiloBtnExit = new ImageButton.ImageButtonStyle();
@@ -122,15 +120,14 @@ public class MainMenu implements Screen {
         BotonExit = new ImageButton(EstiloBtnExit);
 
         // Posicionar el botón en la pantalla
-        BotonExit.setPosition(275 - BtnExitRegion.getRegionWidth() / 2,
-                260 - BtnExitRegion.getRegionHeight() / 2);
+        BotonExit.setPosition(150, 120);
         BotonExit.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Boton exit");
+                Gdx.app.exit();
             }
         });
 

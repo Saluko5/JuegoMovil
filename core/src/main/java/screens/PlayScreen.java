@@ -38,7 +38,6 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private boolean muerto = false;
-    public boolean inicio = true;
 
     // private GameOverScreen gameover;
 
@@ -89,20 +88,20 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        // int y = 200;
-        // for (int i = 0; i < 25; i++) {
-        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
-        // y += 250;
-        // }
-
-        // -------------------------
         int y = 200;
         for (int i = 0; i < 25; i++) {
             int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-            plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
+            plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
             y += 250;
         }
+
+        // -------------------------
+        // int y = 200;
+        // for (int i = 0; i < 25; i++) {
+        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+        // plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
+        // y += 250;
+        // }
         // gameover = new GameOverScreen(juego, this);
 
     }
@@ -139,16 +138,16 @@ public class PlayScreen implements Screen {
 
         gamecam.update();
 
-        prota.update(dt);
+        // prota.update(dt);
 
-        // for (int i = 0; i < plataformas.size(); i++) {
-        // plataformas.get(i).update(dt);
-        // }
+        for (int i = 0; i < plataformas.size(); i++) {
+            plataformas.get(i).update(dt);
+        }
 
         // ---------------
-        for (int i = 0; i < plataformasnube.size(); i++) {
-            plataformasnube.get(i).update(dt);
-        }
+        // for (int i = 0; i < plataformasnube.size(); i++) {
+        // plataformasnube.get(i).update(dt);
+        // }
 
         // rederizar el mapa del juego
         renderer.setView(gamecam);
@@ -162,13 +161,26 @@ public class PlayScreen implements Screen {
         if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
             muerto = true;
         }
-        /*
-         * if (prota.b2body.getPosition().x < 0) {
-         * prota.setPosition(3.7f, prota.b2body.getPosition().y);
-         * } else if (prota.b2body.getPosition().x > 3.7f) {
-         * prota.setPosition(0f, prota.b2body.getPosition().y);
-         * }
-         */
+
+        if (prota.b2body.getPosition().x < 0) {
+            prota.setPosition(3.7f, prota.b2body.getPosition().y);
+            prota.b2body.setTransform(3.7f, prota.b2body.getPosition().y, prota.b2body.getAngle());
+        } else if (prota.b2body.getPosition().x > 3.7f) {
+            prota.setPosition(0f, prota.b2body.getPosition().y);
+            prota.b2body.setTransform(0f, prota.b2body.getPosition().y, prota.b2body.getAngle());
+        }
+
+        if (Gdx.input.isTouched()) {
+            // Conseguir la posicion de tocar
+            float xTouchPixel = Gdx.input.getX();
+            float yTouchPixel = Gdx.input.getY();
+
+            System.out.println("x" + xTouchPixel / 100);
+            prota.b2body.setTransform(xTouchPixel / 100, prota.b2body.getPosition().y,
+                    prota.b2body.getAngle());
+            // System.out.println("tocar");
+        }
+
     }
 
     @Override
@@ -204,11 +216,6 @@ public class PlayScreen implements Screen {
             juego.setScreen(new GameOverScreen(juego, this));
             dispose();
         }
-        if (inicio) {
-            juego.setScreen(new OptionsScreen(juego));
-            dispose();
-        }
-
     }
 
     @Override

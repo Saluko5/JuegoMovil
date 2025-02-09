@@ -142,6 +142,17 @@ public class ProtaFinal extends Sprite {
 
         b2body.createFixture(fdef).setUserData("pies");
 
+        // Ahora creare la linea q hara de sensor para saber si lo que esta esta es una
+        // plataforma
+        // y asi hacerlo sensor y por lo cual hacer que no tenga colision
+        EdgeShape cabeza = new EdgeShape();
+        cabeza.set(new Vector2(-2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM),
+                new Vector2(2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM));
+        fdef.shape = cabeza;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData("cabeza");
+
     }
 
 }

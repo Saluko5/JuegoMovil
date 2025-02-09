@@ -17,96 +17,92 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
-public class OptionsScreen implements Screen {
-    private Main juego;
+public class LevelsMenu implements Screen {
+
     private Viewport viewport;
     private Stage stage;
 
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
-    // Creacion de boton volver
-    private Texture TexturaBtnVolver;
-    private TextureRegion BtnVolverRegion;
-    private ImageButton BotonVolver;
+    // Creacion de boton jugar
+    private Texture TexturaBtnLvl1;
+    private TextureRegion BtnLvl1Region;
+    private ImageButton BotonLvl1;
 
-    public OptionsScreen(Main juego) {
-        this.juego = juego;
+    Game game;
+    Main main;
+
+    public LevelsMenu(Game game) {
+        this.game = game;
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, ((Main) juego).batch);
-
-        // Creo la imagen de fondo
+        stage = new Stage(viewport, ((Main) game).batch);
+        // ---
         backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
         backgroundImage = new Image(backgroundTexture); // Crear el objeto Image para el fondo
         backgroundImage.setSize(600, 800);
         backgroundImage.setPosition(0, 0);
-
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
-        // Creacion del boton para volver al menu
-        TexturaBtnVolver = new Texture(Gdx.files.internal("BotonVolver.png"));
-        BtnVolverRegion = new TextureRegion(TexturaBtnVolver);
+        // Creacion del boton para jugar al lvl1
+        TexturaBtnLvl1 = new Texture(Gdx.files.internal("maps/fondojuego2.png"));
+        BtnLvl1Region = new TextureRegion(TexturaBtnLvl1);
 
-        ImageButton.ImageButtonStyle EstiloBtnVolver = new ImageButton.ImageButtonStyle();
-        EstiloBtnVolver.up = new TextureRegionDrawable(BtnVolverRegion);
+        ImageButton.ImageButtonStyle EstiloBtnLvl1 = new ImageButton.ImageButtonStyle();
+        EstiloBtnLvl1.up = new TextureRegionDrawable(BtnLvl1Region);
 
-        BotonVolver = new ImageButton(EstiloBtnVolver);
+        BotonLvl1 = new ImageButton(EstiloBtnLvl1);
 
         // Posicionar el botón en la pantalla
-        BotonVolver.setPosition(0, 650);
-        BotonVolver.setSize(50, 50);
+        BotonLvl1.setPosition(150, 370);
+        BotonLvl1.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
-        BotonVolver.addListener(new ClickListener() {
+        BotonLvl1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                juego.setScreen(new MainMenu(juego));
+                game.setScreen(new PlayScreen(main));
                 dispose();
             }
         });
 
-        stage.addActor(BotonVolver);
+        stage.addActor(BotonLvl1);
 
         Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void dispose() {
-
     }
-
 }

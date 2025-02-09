@@ -29,7 +29,7 @@ public class PlataformaNube extends Sprite {
     ProtaFinal prota;
 
     public PlataformaNube(PlayScreen screen, float x, float y) {
-        super(new Texture("plataformalvl1.png"), 250, 200);
+        super(new Texture("plataformalvl2.png"), 250, 200);
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
@@ -38,8 +38,8 @@ public class PlataformaNube extends Sprite {
         definePlataforma();
         prota = screen.prota;
 
-        plataformacuerpo = new TextureRegion(getTexture(), 15, 84, 225, 32);
-        setBounds(0.1f, 0.1f, 60 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
+        plataformacuerpo = new TextureRegion(getTexture(), 0, 80, 255, 40);
+        setBounds(0.1f, 0.1f, 80 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
         setRegion(plataformacuerpo);
 
         setToDestroy = false;

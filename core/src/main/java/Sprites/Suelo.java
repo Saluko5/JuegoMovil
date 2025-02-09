@@ -19,4 +19,9 @@ public class Suelo extends InteractiveTileObject {
     public void golpePies() {
         Gdx.app.log("suelo", "");
     }
+
+    @Override
+    public void golpeCabeza() {
+        throw new UnsupportedOperationException("Unimplemented method 'golpeCabeza'");
+    }
 }

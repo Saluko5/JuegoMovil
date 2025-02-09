@@ -46,18 +46,18 @@ public class GameOverScreen implements Screen {
 
     public GameOverScreen(Game game, PlayScreen screen) {
         this.game = game;
-        
+
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
         // ---
-        backgroundTexture = new Texture(Gdx.files.internal("plataformalvl1prueba.png")); // Ruta de la imagen de fondo
+        backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
         backgroundImage = new Image(backgroundTexture); // Crear el objeto Image para el fondo
         backgroundImage.setSize(600, 800);
         backgroundImage.setPosition(0, 0);
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Boton de reinicio
-        buttonTexture = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        buttonTexture = new Texture(Gdx.files.internal("BotonReset.png"));
         buttonRegion = new TextureRegion(buttonTexture);
 
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
@@ -66,12 +66,28 @@ public class GameOverScreen implements Screen {
         BotonReinicio = new ImageButton(buttonStyle);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
-        BotonReinicio.setPosition(200 - buttonRegion.getRegionWidth() / 2, 500 - buttonRegion.getRegionHeight() / 2);
+        BotonReinicio.setPosition(150, 400);
+        BotonReinicio.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonReinicio.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                buttonTexture = new Texture(Gdx.files.internal("BotonResetPress.png"));
+                buttonRegion = new TextureRegion(buttonTexture);
+
+                ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
+                buttonStyle.up = new TextureRegionDrawable(buttonRegion);
+
+                BotonReinicio = new ImageButton(buttonStyle);
+
+                // Posicionar el botón en la pantalla (en este caso en el centro)
+                BotonReinicio.setPosition(150, 400);
+                BotonReinicio.setSize(100, 100);
+
+                stage.addActor(BotonReinicio);
+
                 game.setScreen(new PlayScreen((Main) game));
                 dispose();
             }
@@ -80,7 +96,7 @@ public class GameOverScreen implements Screen {
         stage.addActor(BotonReinicio);
         // -----------------------------------------------------------
         // Ahora hare el boton que me lleve al menu
-        TexturaBtnMenu = new Texture(Gdx.files.internal("plataformalvl1prueba.png"));
+        TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranja.png"));
         BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
 
         ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
@@ -89,15 +105,29 @@ public class GameOverScreen implements Screen {
         BotonMenu = new ImageButton(EstiloBtnMenu);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
-        BotonMenu.setPosition(200 - BtnMenuRegion.getRegionWidth() / 2, 250 - BtnMenuRegion.getRegionHeight() / 2);
+        BotonMenu.setPosition(150, 200);
+        BotonMenu.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               // game.setScreen(new PlayScreen((Main) game));
-               // dispose();
-               System.out.println("Menu");
+                TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranjaPress.png"));
+                BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
+
+                ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
+                EstiloBtnMenu.up = new TextureRegionDrawable(BtnMenuRegion);
+
+                BotonMenu = new ImageButton(EstiloBtnMenu);
+
+                // Posicionar el botón en la pantalla (en este caso en el centro)
+                BotonMenu.setPosition(150, 200);
+                BotonMenu.setSize(100, 100);
+
+                stage.addActor(BotonMenu);
+
+                game.setScreen(new MainMenu((Main) game));
+                dispose();
             }
         });
 
