@@ -33,8 +33,8 @@ public class LevelsMenu implements Screen {
     Game game;
     Main main;
 
-    public LevelsMenu(Game game) {
-        this.game = game;
+    public LevelsMenu(Main game) {
+        this.main = game;
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
@@ -46,7 +46,7 @@ public class LevelsMenu implements Screen {
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Creacion del boton para jugar al lvl1
-        TexturaBtnLvl1 = new Texture(Gdx.files.internal("maps/fondojuego2.png"));
+        TexturaBtnLvl1 = new Texture(Gdx.files.internal("lvl1.png"));
         BtnLvl1Region = new TextureRegion(TexturaBtnLvl1);
 
         ImageButton.ImageButtonStyle EstiloBtnLvl1 = new ImageButton.ImageButtonStyle();
@@ -55,8 +55,8 @@ public class LevelsMenu implements Screen {
         BotonLvl1 = new ImageButton(EstiloBtnLvl1);
 
         // Posicionar el botón en la pantalla
-        BotonLvl1.setPosition(150, 370);
-        BotonLvl1.setSize(100, 100);
+        BotonLvl1.setPosition(50, 250);
+        BotonLvl1.setSize(150, 200);
 
         // Añadir un listener al botón para el evento de clic
         BotonLvl1.addListener(new ClickListener() {

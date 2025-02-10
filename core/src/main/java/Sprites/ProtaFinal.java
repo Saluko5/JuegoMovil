@@ -119,7 +119,7 @@ public class ProtaFinal extends Sprite {
 
     public void defineProta() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(200 / ProtaFinal.PPM, 95 / ProtaFinal.PPM);
+        bdef.position.set(200 / ProtaFinal.PPM, 100 / ProtaFinal.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -145,13 +145,13 @@ public class ProtaFinal extends Sprite {
         // Ahora creare la linea q hara de sensor para saber si lo que esta esta es una
         // plataforma
         // y asi hacerlo sensor y por lo cual hacer que no tenga colision
-        EdgeShape cabeza = new EdgeShape();
-        cabeza.set(new Vector2(-2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM),
-                new Vector2(2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM));
-        fdef.shape = cabeza;
-        fdef.isSensor = true;
+        // EdgeShape cabeza = new EdgeShape();
+        // cabeza.set(new Vector2(-2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM),
+        //         new Vector2(2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM));
+        // fdef.shape = cabeza;
+        // fdef.isSensor = true;
 
-        b2body.createFixture(fdef).setUserData("cabeza");
+        // b2body.createFixture(fdef).setUserData("cabeza");
 
     }
 

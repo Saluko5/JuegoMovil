@@ -79,7 +79,7 @@ public class MainMenu implements Screen {
         BotonJugar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                juego.setScreen(new PlayScreen(juego));
+                juego.setScreen(new LevelsMenu(juego));
                 dispose();
             }
         });

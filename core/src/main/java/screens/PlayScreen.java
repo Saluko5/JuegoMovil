@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -78,7 +79,7 @@ public class PlayScreen implements Screen {
         prota = new ProtaFinal(this);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("maps/fondo.tmx");
+        map = mapLoader.load("maps/fondolargofinal.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / ProtaFinal.PPM);
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -91,7 +92,7 @@ public class PlayScreen implements Screen {
         int y = 200;
         for (int i = 0; i < 25; i++) {
             int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-            plataformas.add(new PlataformaNormal(this, x, y)); // primer y 200
+            plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
             y += 250;
         }
 
@@ -118,16 +119,23 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt) {
 
         // Moviemiento
+
         if (!muerto) {
             if (contacto.contacto) {
                 prota.b2body.applyLinearImpulse(new Vector2(0, 4f), prota.b2body.getWorldCenter(), true);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && prota.b2body.getLinearVelocity().x <= 2) {
-                prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0), prota.b2body.getWorldCenter(), true);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && prota.b2body.getLinearVelocity().x >= -2) {
-                prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), prota.b2body.getWorldCenter(), true);
-            }
+            /*
+             * if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
+             * prota.b2body.getLinearVelocity().x <= 2) {
+             * prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0),
+             * prota.b2body.getWorldCenter(), true);
+             * }
+             * if (Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
+             * prota.b2body.getLinearVelocity().x >= -2) {
+             * prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0),
+             * prota.b2body.getWorldCenter(), true);
+             * }
+             */
         }
     }
 
@@ -138,7 +146,7 @@ public class PlayScreen implements Screen {
 
         gamecam.update();
 
-        // prota.update(dt);
+        prota.update(dt);
 
         for (int i = 0; i < plataformas.size(); i++) {
             plataformas.get(i).update(dt);
@@ -171,14 +179,17 @@ public class PlayScreen implements Screen {
         }
 
         if (Gdx.input.isTouched()) {
-            // Conseguir la posicion de tocar
+            // Conseguir la posición de toque en la pantalla
             float xTouchPixel = Gdx.input.getX();
-            float yTouchPixel = Gdx.input.getY();
 
-            System.out.println("x" + xTouchPixel / 100);
-            prota.b2body.setTransform(xTouchPixel / 100, prota.b2body.getPosition().y,
+            // Convertir las coordenadas de pantalla a coordenadas del mundo
+            Vector3 touchPos = new Vector3(xTouchPixel, prota.b2body.getPosition().y, 0);
+            gamecam.unproject(touchPos);
+
+            // Actualizar la posición del prota según las coordenadas del mundo
+            prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y,
                     prota.b2body.getAngle());
-            // System.out.println("tocar");
+            System.out.println(touchPos.x);
         }
 
     }

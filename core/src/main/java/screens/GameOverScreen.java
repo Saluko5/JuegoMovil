@@ -39,7 +39,6 @@ public class GameOverScreen implements Screen {
     private ImageButton BotonMenu;
     private Game game;
     public boolean inicio = false;
-    PlayScreen screen;
 
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;

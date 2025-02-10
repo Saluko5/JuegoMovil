@@ -22,9 +22,13 @@ public class PlataformaNormal extends Sprite {
     private TextureRegion plataformacuerpo;
     float x;
     float y;
+    boolean movilidad;
+    float desplazamiento = 1f;
+    int contador = 0;
 
-    public PlataformaNormal(PlayScreen screen, float x, float y) {
+    public PlataformaNormal(PlayScreen screen, float x, float y, boolean movilidad) {
         super(new Texture("plataformalvl1.png"), 250, 200);
+        this.movilidad = movilidad;
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
@@ -66,6 +70,17 @@ public class PlataformaNormal extends Sprite {
         setPosition((b2body.getPosition().x) - getWidth() / 2,
                 (b2body.getPosition().y) - getHeight() / 2);
         setRegion(plataformacuerpo);
+
+        if (movilidad) {
+            if (desplazamiento > 0) {
+                x += 0.01f;
+                desplazamiento -= 0.01f;
+            } else {
+                desplazamiento += 0.01f;
+                x -= 0.01f;
+            }
+            b2body.setTransform(x, b2body.getPosition().y, b2body.getAngle());
+        }
     }
 
     public void pisada() {

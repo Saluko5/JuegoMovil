@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import screens.LevelsMenu;
 import screens.MainMenu;
 import screens.OptionsScreen;
 import screens.PlayScreen;
@@ -22,7 +23,7 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        setScreen(new MainMenu(this));
+        setScreen(new LevelsMenu(this));
     }
 
     @Override
