@@ -25,10 +25,20 @@ public class LevelsMenu implements Screen {
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
-    // Creacion de boton jugar
+    // Creacion de boton lvl1
     private Texture TexturaBtnLvl1;
     private TextureRegion BtnLvl1Region;
     private ImageButton BotonLvl1;
+
+    // Creacion de boton lvl2
+    private Texture TexturaBtnLvl2;
+    private TextureRegion BtnLvl2Region;
+    private ImageButton BotonLvl2;
+
+    // Creacion de boton volver
+    private Texture TexturaBtnVolver;
+    private TextureRegion BtnVolverRegion;
+    private ImageButton BotonVolver;
 
     Game game;
     Main main;
@@ -55,19 +65,67 @@ public class LevelsMenu implements Screen {
         BotonLvl1 = new ImageButton(EstiloBtnLvl1);
 
         // Posicionar el botón en la pantalla
-        BotonLvl1.setPosition(50, 250);
+        BotonLvl1.setPosition(30, 250);
         BotonLvl1.setSize(150, 200);
 
         // Añadir un listener al botón para el evento de clic
         BotonLvl1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PlayScreen(main));
+                game.setScreen(new PlayScreen(main, 1));
                 dispose();
             }
         });
 
         stage.addActor(BotonLvl1);
+
+        // Creacion del boton para jugar al lvl2
+        TexturaBtnLvl2 = new Texture(Gdx.files.internal("marcolvl2.png"));
+        BtnLvl2Region = new TextureRegion(TexturaBtnLvl2);
+
+        ImageButton.ImageButtonStyle EstiloBtnLvl2 = new ImageButton.ImageButtonStyle();
+        EstiloBtnLvl2.up = new TextureRegionDrawable(BtnLvl2Region);
+
+        BotonLvl2 = new ImageButton(EstiloBtnLvl2);
+
+        // Posicionar el botón en la pantalla
+        BotonLvl2.setPosition(200, 250);
+        BotonLvl2.setSize(170, 200);
+
+        // Añadir un listener al botón para el evento de clic
+        BotonLvl2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PlayScreen(main, 2));
+                dispose();
+            }
+        });
+
+        stage.addActor(BotonLvl2);
+
+        // Creacion del boton para volver al menu
+        TexturaBtnVolver = new Texture(Gdx.files.internal("BotonVolver.png"));
+        BtnVolverRegion = new TextureRegion(TexturaBtnVolver);
+
+        ImageButton.ImageButtonStyle EstiloBtnVolver = new ImageButton.ImageButtonStyle();
+        EstiloBtnVolver.up = new TextureRegionDrawable(BtnVolverRegion);
+
+        BotonVolver = new ImageButton(EstiloBtnVolver);
+
+        // Posicionar el botón en la pantalla
+        BotonVolver.setPosition(0, 650);
+        BotonVolver.setSize(50, 50);
+
+        // Añadir un listener al botón para el evento de clic
+        BotonVolver.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
+        });
+
+        stage.addActor(BotonVolver);
 
         Gdx.input.setInputProcessor(stage);
 

@@ -34,6 +34,8 @@ public class ProtaFinal extends Sprite {
     public static final float PPM = 100;
     private TextureRegion protadepie;
     private TextureRegion protasaltando;
+    float posicionactual;
+    float posicionanterior = -10;
 
     public ProtaFinal(PlayScreen screen) {
         super(new Texture("ProtaSaltoMejorado.png"), 500, 500);
@@ -78,12 +80,12 @@ public class ProtaFinal extends Sprite {
 
         // si la velocidad de x es menor de cero(osea q se mueve pero para no a la
         // derecha ocurre y si no esta girado el if
-        if ((b2body.getLinearVelocity().x > 0 || !ladoderecho) && !region.isFlipX()) {
+        if ((posicionactual > posicionanterior || !ladoderecho) && !region.isFlipX()) {
             // con esto lo voltea
             region.flip(true, false);
             ladoderecho = false;
             // ahora en para el otro lado
-        } else if ((b2body.getLinearVelocity().x < 0 || ladoderecho) && region.isFlipX()) {
+        } else if ((posicionactual < posicionanterior || ladoderecho) && region.isFlipX()) {
             // se le da la vuelta tmb
             region.flip(true, false);
             ladoderecho = true;
@@ -115,6 +117,14 @@ public class ProtaFinal extends Sprite {
         // setRegion(protadepie);
 
         setRegion(getFrame(dt));
+
+        if (posicionanterior == -10) {
+            posicionactual = b2body.getPosition().x;
+            posicionanterior = posicionactual;
+        } else {
+            posicionanterior = posicionactual;
+            posicionactual = b2body.getPosition().x;
+        }
     }
 
     public void defineProta() {
@@ -147,7 +157,7 @@ public class ProtaFinal extends Sprite {
         // y asi hacerlo sensor y por lo cual hacer que no tenga colision
         // EdgeShape cabeza = new EdgeShape();
         // cabeza.set(new Vector2(-2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM),
-        //         new Vector2(2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM));
+        // new Vector2(2 / ProtaFinal.PPM, 100 / ProtaFinal.PPM));
         // fdef.shape = cabeza;
         // fdef.isSensor = true;
 

@@ -52,16 +52,20 @@ public class PlayScreen implements Screen {
 
     private TextureAtlas atlas;
 
+    public int nivel = 1;
+    private boolean ganar = false;
+
     private WorldContactListener contacto;
     private ArrayList<PlataformaNormal> plataformas = new ArrayList<>();
     private ArrayList<PlataformaNube> plataformasnube = new ArrayList<>();
 
     // Constructor
-    public PlayScreen(Main juego) {
+    public PlayScreen(Main juego, int nivel) {
 
         atlas = new TextureAtlas("mario.atlas");
 
         this.juego = juego;
+        this.nivel = nivel;
 
         // Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
@@ -79,7 +83,11 @@ public class PlayScreen implements Screen {
         prota = new ProtaFinal(this);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("maps/fondolargofinal.tmx");
+        if (nivel == 1) {
+            map = mapLoader.load("maps/fondolargofinal.tmx");
+        } else {
+            map = mapLoader.load("maps/fondoespacio.tmx");
+        }
         renderer = new OrthogonalTiledMapRenderer(map, 1 / ProtaFinal.PPM);
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -89,8 +97,17 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        int y = 200;
-        for (int i = 0; i < 25; i++) {
+        int xtemp = rdm.nextInt(60, 140);
+        int xtemp2 = rdm.nextInt(240, 340);
+        int n = rdm.nextInt(1, 3);
+        if (n == 1) {
+            plataformas.add(new PlataformaNormal(this, xtemp, 250, false));
+        } else {
+            plataformas.add(new PlataformaNormal(this, xtemp2, 250, false));
+        }
+
+        int y = 550;
+        for (int i = 0; i < 30; i++) {
             int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
             plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
             y += 250;
@@ -160,11 +177,16 @@ public class PlayScreen implements Screen {
         // rederizar el mapa del juego
         renderer.setView(gamecam);
 
-        if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM && !muerto) {
+        if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM && !muerto
+                && prota.b2body.getPosition().y < 76.2f) {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
             altitudMin = (prota.b2body.getPosition().y * ProtaFinal.PPM) - 350;
             hud.ActualizarPuntuacion(altitudMin);
+        }
+        if ((prota.b2body.getPosition().y > 80f) && !muerto) {
+            System.out.println("gane" + prota.b2body.getPosition().y);
+            ganar = true;
         }
         if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
             muerto = true;
@@ -189,7 +211,7 @@ public class PlayScreen implements Screen {
             // Actualizar la posición del prota según las coordenadas del mundo
             prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y,
                     prota.b2body.getAngle());
-            System.out.println(touchPos.x);
+            System.out.println(touchPos.y);
         }
 
     }
@@ -224,7 +246,11 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
 
         if (muerto) {
-            juego.setScreen(new GameOverScreen(juego, this));
+            juego.setScreen(new GameOverScreen(juego, nivel));
+            dispose();
+        }
+        if (ganar) {
+            juego.setScreen(new MainMenu(juego));
             dispose();
         }
     }

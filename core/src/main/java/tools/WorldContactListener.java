@@ -12,7 +12,7 @@ import Sprites.PlataformaNube;
 
 public class WorldContactListener implements ContactListener {
 
-    public boolean contacto = true;
+    public boolean contacto = false;
 
     // Esto sucede cuando hacen contacto las colisiones de dos objetos
     // Cuando hay un contacto hay dos accesorios, el a y el b, asi q los pillamos
@@ -45,7 +45,7 @@ public class WorldContactListener implements ContactListener {
                 // Si el primero cuerpo de la colision es la plataforma
                 if (fixA.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
                     ((PlataformaNube) fixA.getUserData()).pisada();
-                    
+
                 } else if (fixB.getFilterData().categoryBits == Main.PLATAFORMA_BIT) {
                     ((PlataformaNube) fixB.getUserData()).pisada();
                 }
