@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
-public class LevelsMenu implements Screen {
+public class WinScreen implements Screen {
 
     private Viewport viewport;
     private Stage stage;
@@ -25,24 +25,19 @@ public class LevelsMenu implements Screen {
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
-    // Creacion de boton lvl1
-    private Texture TexturaBtnLvl1;
-    private TextureRegion BtnLvl1Region;
-    private ImageButton BotonLvl1;
+    // Para hacer boton menu
+    private Texture TexturaBtnMenu;
+    private TextureRegion BtnMenuRegion;
+    private ImageButton BotonMenu;
 
-    // Creacion de boton lvl2
-    private Texture TexturaBtnLvl2;
-    private TextureRegion BtnLvl2Region;
-    private ImageButton BotonLvl2;
-
-    // Creacion de boton volver
-    private Texture TexturaBtnVolver;
-    private TextureRegion BtnVolverRegion;
-    private ImageButton BotonVolver;
+    // Creacion de boton siguiente nivel
+    private Texture TexturaBtnNext;
+    private TextureRegion BtnNextRegion;
+    private ImageButton BotonNext;
 
     Main main;
 
-    public LevelsMenu(Main main) {
+    public WinScreen(Main main, int nivel) {
         this.main = main;
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
@@ -54,45 +49,53 @@ public class LevelsMenu implements Screen {
         backgroundImage.setPosition(0, 0);
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
-        // Creacion del boton para jugar al lvl1
-        TexturaBtnLvl1 = new Texture(Gdx.files.internal("lvl1.png"));
-        BtnLvl1Region = new TextureRegion(TexturaBtnLvl1);
+        // Ahora hare el boton que me lleve al menu
+        TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranja.png"));
+        BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
 
-        ImageButton.ImageButtonStyle EstiloBtnLvl1 = new ImageButton.ImageButtonStyle();
-        EstiloBtnLvl1.up = new TextureRegionDrawable(BtnLvl1Region);
+        ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
+        EstiloBtnMenu.up = new TextureRegionDrawable(BtnMenuRegion);
 
-        BotonLvl1 = new ImageButton(EstiloBtnLvl1);
+        BotonMenu = new ImageButton(EstiloBtnMenu);
 
-        // Posicionar el botón en la pantalla
-        BotonLvl1.setPosition(30, 250);
-        BotonLvl1.setSize(150, 200);
+        // Posicionar el botón en la pantalla (en este caso en el centro)
+        if (nivel == 1) {
+            BotonMenu.setPosition(150, 200);
+        } else {
+            BotonMenu.setPosition(150, 300);
+        }
+        BotonMenu.setSize(100, 100);
 
         // Añadir un listener al botón para el evento de clic
-        BotonLvl1.addListener(new ClickListener() {
+        BotonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setScreen(new PlayScreen(main, 1));
+                main.setScreen(new MainMenu((Main) main));
                 dispose();
             }
         });
 
-        stage.addActor(BotonLvl1);
+        stage.addActor(BotonMenu);
 
         // Creacion del boton para jugar al lvl2
-        TexturaBtnLvl2 = new Texture(Gdx.files.internal("marcolvl2.png"));
-        BtnLvl2Region = new TextureRegion(TexturaBtnLvl2);
+        TexturaBtnNext = new Texture(Gdx.files.internal("BtnNextLvl.png"));
+        BtnNextRegion = new TextureRegion(TexturaBtnNext);
 
-        ImageButton.ImageButtonStyle EstiloBtnLvl2 = new ImageButton.ImageButtonStyle();
-        EstiloBtnLvl2.up = new TextureRegionDrawable(BtnLvl2Region);
+        ImageButton.ImageButtonStyle EstiloBtnNext = new ImageButton.ImageButtonStyle();
+        EstiloBtnNext.up = new TextureRegionDrawable(BtnNextRegion);
 
-        BotonLvl2 = new ImageButton(EstiloBtnLvl2);
+        BotonNext = new ImageButton(EstiloBtnNext);
 
         // Posicionar el botón en la pantalla
-        BotonLvl2.setPosition(200, 250);
-        BotonLvl2.setSize(170, 200);
+        BotonNext.setPosition(150, 370);
+        BotonNext.setSize(100, 100);
+        if (nivel == 2) {
+            BotonNext.setVisible(false);
+            BotonNext.setDisabled(true);
+        }
 
         // Añadir un listener al botón para el evento de clic
-        BotonLvl2.addListener(new ClickListener() {
+        BotonNext.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setScreen(new PlayScreen(main, 2));
@@ -100,31 +103,7 @@ public class LevelsMenu implements Screen {
             }
         });
 
-        stage.addActor(BotonLvl2);
-
-        // Creacion del boton para volver al menu
-        TexturaBtnVolver = new Texture(Gdx.files.internal("BotonVolver.png"));
-        BtnVolverRegion = new TextureRegion(TexturaBtnVolver);
-
-        ImageButton.ImageButtonStyle EstiloBtnVolver = new ImageButton.ImageButtonStyle();
-        EstiloBtnVolver.up = new TextureRegionDrawable(BtnVolverRegion);
-
-        BotonVolver = new ImageButton(EstiloBtnVolver);
-
-        // Posicionar el botón en la pantalla
-        BotonVolver.setPosition(0, 650);
-        BotonVolver.setSize(50, 50);
-
-        // Añadir un listener al botón para el evento de clic
-        BotonVolver.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setScreen(new MainMenu(main));
-                dispose();
-            }
-        });
-
-        stage.addActor(BotonVolver);
+        stage.addActor(BotonNext);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -136,11 +115,13 @@ public class LevelsMenu implements Screen {
 
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
     }
 
     @Override
@@ -163,4 +144,5 @@ public class LevelsMenu implements Screen {
     public void dispose() {
         stage.dispose();
     }
+
 }

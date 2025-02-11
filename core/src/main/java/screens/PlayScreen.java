@@ -65,7 +65,9 @@ public class PlayScreen implements Screen {
         atlas = new TextureAtlas("mario.atlas");
 
         this.juego = juego;
+        System.out.println("nivel antes" + nivel);
         this.nivel = nivel;
+        System.out.println("nivel despues" + nivel);
 
         // Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
@@ -97,22 +99,42 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
-        int xtemp = rdm.nextInt(60, 140);
-        int xtemp2 = rdm.nextInt(240, 340);
-        int n = rdm.nextInt(1, 3);
-        if (n == 1) {
-            plataformas.add(new PlataformaNormal(this, xtemp, 250, false));
+        if (nivel == 1) {
+
+            int xtemp = rdm.nextInt(60, 140);
+            int xtemp2 = rdm.nextInt(240, 340);
+            int n = rdm.nextInt(1, 3);
+            if (n == 1) {
+                plataformas.add(new PlataformaNormal(this, xtemp, 250, false));
+            } else {
+                plataformas.add(new PlataformaNormal(this, xtemp2, 250, false));
+            }
+
+            int y = 550;
+            for (int i = 0; i < 30; i++) {
+                int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+                plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
+                y += 250;
+            }
+
         } else {
-            plataformas.add(new PlataformaNormal(this, xtemp2, 250, false));
-        }
+            // Para el nivel 2
+            int xtemp = rdm.nextInt(60, 140);
+            int xtemp2 = rdm.nextInt(240, 340);
+            int n = rdm.nextInt(1, 3);
+            if (n == 1) {
+                plataformasnube.add(new PlataformaNube(this, xtemp, 250));
+            } else {
+                plataformasnube.add(new PlataformaNube(this, xtemp2, 250));
+            }
 
-        int y = 550;
-        for (int i = 0; i < 30; i++) {
-            int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-            plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
-            y += 250;
+            int y = 550;
+            for (int i = 0; i < 30; i++) {
+                int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
+                plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
+                y += 250;
+            }
         }
-
         // -------------------------
         // int y = 200;
         // for (int i = 0; i < 25; i++) {
@@ -139,7 +161,8 @@ public class PlayScreen implements Screen {
 
         if (!muerto) {
             if (contacto.contacto) {
-                prota.b2body.applyLinearImpulse(new Vector2(0, 4f), prota.b2body.getWorldCenter(), true);
+                prota.b2body.setLinearVelocity(0, 0);
+                prota.b2body.applyLinearImpulse(new Vector2(0, 8f), prota.b2body.getWorldCenter(), true);
             }
             /*
              * if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
@@ -170,9 +193,9 @@ public class PlayScreen implements Screen {
         }
 
         // ---------------
-        // for (int i = 0; i < plataformasnube.size(); i++) {
-        // plataformasnube.get(i).update(dt);
-        // }
+        for (int i = 0; i < plataformasnube.size(); i++) {
+            plataformasnube.get(i).update(dt);
+        }
 
         // rederizar el mapa del juego
         renderer.setView(gamecam);
@@ -246,11 +269,12 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
 
         if (muerto) {
+            Gdx.input.vibrate(1000, false);
             juego.setScreen(new GameOverScreen(juego, nivel));
             dispose();
         }
         if (ganar) {
-            juego.setScreen(new MainMenu(juego));
+            juego.setScreen(new WinScreen(juego, nivel));
             dispose();
         }
     }

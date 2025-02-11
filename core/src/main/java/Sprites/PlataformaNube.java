@@ -60,8 +60,8 @@ public class PlataformaNube extends Sprite {
         // Y con esto le damos el tamaño
         shape.setAsBox(30 / ProtaFinal.PPM, 10 / ProtaFinal.PPM); // esta a 20
         fdef.filter.categoryBits = Main.LINEADENUBE_BIT;
-        // fdef.filter.maskBits = Main.TIERRA_BIT | Main.PROTA_BIT |
-        // Main.PLATAFORMA_BIT;
+        fdef.filter.maskBits = Main.TIERRA_BIT | Main.PROTA_BIT |
+                Main.PLATAFORMA_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -108,8 +108,9 @@ public class PlataformaNube extends Sprite {
     public void pisada() {
         setToDestroy = true;
         Gdx.app.log("plataforma nube", "");
-        // prota.b2body.applyLinearImpulse(new Vector2(0, 14),
-        // prota.b2body.getWorldCenter(), true);
+        prota.b2body.setLinearVelocity(0, 0);
+        prota.b2body.applyLinearImpulse(new Vector2(0, 8f),
+                prota.b2body.getWorldCenter(), true);
         contacto = true;
     }
 }

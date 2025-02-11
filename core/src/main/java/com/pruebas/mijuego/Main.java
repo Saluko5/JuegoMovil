@@ -8,6 +8,7 @@ import screens.LevelsMenu;
 import screens.MainMenu;
 import screens.OptionsScreen;
 import screens.PlayScreen;
+import screens.WinScreen;
 
 public class Main extends Game {
 
@@ -23,6 +24,7 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        // setScreen(new WinScreen(this, 2));
         setScreen(new MainMenu(this));
     }
 

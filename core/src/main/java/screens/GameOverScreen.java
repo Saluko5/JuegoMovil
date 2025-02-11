@@ -37,7 +37,7 @@ public class GameOverScreen implements Screen {
     private Texture TexturaBtnMenu;
     private TextureRegion BtnMenuRegion;
     private ImageButton BotonMenu;
-    private Game game;
+    // private Game game;
     int nivel;
     public boolean inicio = false;
     Main main;
@@ -45,12 +45,13 @@ public class GameOverScreen implements Screen {
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
-    public GameOverScreen(Main game, int nivel) {
-        this.game = game;
+    public GameOverScreen(Main main, int nivel) {
+        this.main = main;
         this.nivel = nivel;
+        System.out.println("nivel" + nivel);
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, ((Main) game).batch);
+        stage = new Stage(viewport, ((Main) main).batch);
         // ---
         backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
         backgroundImage = new Image(backgroundTexture); // Crear el objeto Image para el fondo
@@ -90,7 +91,7 @@ public class GameOverScreen implements Screen {
 
                 stage.addActor(BotonReinicio);
 
-                game.setScreen(new PlayScreen((game), 1));
+                main.setScreen(new PlayScreen((main), nivel));
                 dispose();
             }
         });
@@ -128,7 +129,7 @@ public class GameOverScreen implements Screen {
 
                 stage.addActor(BotonMenu);
 
-                game.setScreen(new MainMenu((Main) game));
+                main.setScreen(new MainMenu((Main) main));
                 dispose();
             }
         });

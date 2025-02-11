@@ -106,7 +106,7 @@ public class OptionsScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
 }
