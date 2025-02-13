@@ -66,14 +66,12 @@ public class PlayScreen implements Screen {
         atlas = new TextureAtlas("mario.atlas");
 
         this.juego = juego;
-        System.out.println("nivel antes" + nivel);
         this.nivel = nivel;
-        System.out.println("nivel despues" + nivel);
 
         // Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
 
-        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
+        gamePort = new FitViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
 
         // Sirve para el hud del tiempo y el nivel
         hud = new Hud(juego.batch, altitudMin);
@@ -165,18 +163,6 @@ public class PlayScreen implements Screen {
                 prota.b2body.setLinearVelocity(0, 0);
                 prota.b2body.applyLinearImpulse(new Vector2(0, 8f), prota.b2body.getWorldCenter(), true);
             }
-            /*
-             * if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
-             * prota.b2body.getLinearVelocity().x <= 2) {
-             * prota.b2body.applyLinearImpulse(new Vector2(0.1f, 0),
-             * prota.b2body.getWorldCenter(), true);
-             * }
-             * if (Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
-             * prota.b2body.getLinearVelocity().x >= -2) {
-             * prota.b2body.applyLinearImpulse(new Vector2(-0.1f, 0),
-             * prota.b2body.getWorldCenter(), true);
-             * }
-             */
         }
     }
 

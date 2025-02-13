@@ -142,15 +142,15 @@ public class MainMenu implements Screen {
         stage.addActor(BotonExit);
 
         // Creacion del boton para jugar
-        TexturaTitulo = new Texture(Gdx.files.internal("logoAlien.png"));
+        TexturaTitulo = new Texture(Gdx.files.internal("tituloJuego.png"));
         TituloRegion = new TextureRegion(TexturaTitulo);
 
         ImageButton.ImageButtonStyle EstiloTitutlo = new ImageButton.ImageButtonStyle();
         EstiloTitutlo.up = new TextureRegionDrawable(TituloRegion);
         Image titulo = new Image(TexturaTitulo);
 
-        titulo.setSize(100, 100);
-        titulo.setPosition(200, 200);
+        titulo.setSize(350, 150);
+        titulo.setPosition(25, 500);
 
         stage.addActor(titulo);
 

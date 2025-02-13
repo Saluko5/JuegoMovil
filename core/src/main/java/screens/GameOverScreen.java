@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -41,6 +42,9 @@ public class GameOverScreen implements Screen {
     int nivel;
     public boolean inicio = false;
     Main main;
+
+    // Para la musica
+    private Music music;
 
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
@@ -137,6 +141,10 @@ public class GameOverScreen implements Screen {
         stage.addActor(BotonMenu);
 
         Gdx.input.setInputProcessor(stage);
+
+        music = Main.manager.get("music/CancionGameOver.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
