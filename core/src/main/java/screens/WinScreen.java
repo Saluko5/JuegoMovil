@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
@@ -40,7 +41,7 @@ public class WinScreen implements Screen {
     public WinScreen(Main main, int nivel) {
         this.main = main;
 
-        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
         // ---
         backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
@@ -60,11 +61,11 @@ public class WinScreen implements Screen {
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
         if (nivel == 1) {
-            BotonMenu.setPosition(150, 200);
+            BotonMenu.setPosition(100, 200);
         } else {
-            BotonMenu.setPosition(150, 300);
+            BotonMenu.setPosition(100, 300);
         }
-        BotonMenu.setSize(100, 100);
+        BotonMenu.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonMenu.addListener(new ClickListener() {
@@ -87,8 +88,8 @@ public class WinScreen implements Screen {
         BotonNext = new ImageButton(EstiloBtnNext);
 
         // Posicionar el botón en la pantalla
-        BotonNext.setPosition(150, 370);
-        BotonNext.setSize(100, 100);
+        BotonNext.setPosition(100, 370);
+        BotonNext.setSize(200, 100);
         if (nivel == 2) {
             BotonNext.setVisible(false);
             BotonNext.setDisabled(true);

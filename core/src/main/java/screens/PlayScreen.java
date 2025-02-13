@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
@@ -48,7 +49,7 @@ public class PlayScreen implements Screen {
     public ProtaFinal prota;
     private float altidudMax = 350;
     public float altitudMin = 0;
-    private Random rdm = new Random();
+    public Random rdm = new Random();
 
     private TextureAtlas atlas;
 

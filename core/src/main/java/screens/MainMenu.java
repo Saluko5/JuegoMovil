@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
@@ -49,10 +51,16 @@ public class MainMenu implements Screen {
     private TextureRegion BtnExitRegion;
     private ImageButton BotonExit;
 
+    private Texture TexturaTitulo;
+    private TextureRegion TituloRegion;
+
+    // Para la musica del menu
+    private Music music;
+
     public MainMenu(Main juego) {
         this.juego = juego;
 
-        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) juego).batch);
 
         // Creacion del fondo del menu
@@ -72,8 +80,8 @@ public class MainMenu implements Screen {
         BotonJugar = new ImageButton(EstiloBtnJugar);
 
         // Posicionar el botón en la pantalla
-        BotonJugar.setPosition(150, 370);
-        BotonJugar.setSize(100, 100);
+        BotonJugar.setPosition(100, 370);
+        BotonJugar.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonJugar.addListener(new ClickListener() {
@@ -96,8 +104,8 @@ public class MainMenu implements Screen {
         BotonOptions = new ImageButton(EstiloBtnOptions);
 
         // Posicionar el botón en la pantalla
-        BotonOptions.setPosition(150, 250);
-        BotonOptions.setSize(100, 100);
+        BotonOptions.setPosition(100, 250);
+        BotonOptions.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonOptions.addListener(new ClickListener() {
@@ -120,8 +128,8 @@ public class MainMenu implements Screen {
         BotonExit = new ImageButton(EstiloBtnExit);
 
         // Posicionar el botón en la pantalla
-        BotonExit.setPosition(150, 120);
-        BotonExit.setSize(100, 100);
+        BotonExit.setPosition(100, 120);
+        BotonExit.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonExit.addListener(new ClickListener() {
@@ -133,7 +141,26 @@ public class MainMenu implements Screen {
 
         stage.addActor(BotonExit);
 
+        // Creacion del boton para jugar
+        TexturaTitulo = new Texture(Gdx.files.internal("logoAlien.png"));
+        TituloRegion = new TextureRegion(TexturaTitulo);
+
+        ImageButton.ImageButtonStyle EstiloTitutlo = new ImageButton.ImageButtonStyle();
+        EstiloTitutlo.up = new TextureRegionDrawable(TituloRegion);
+        Image titulo = new Image(TexturaTitulo);
+
+        titulo.setSize(100, 100);
+        titulo.setPosition(200, 200);
+
+        stage.addActor(titulo);
+
+        // Textura del titulo del juego
+
         Gdx.input.setInputProcessor(stage);
+
+        music = Main.manager.get("music/CancionMenu.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override

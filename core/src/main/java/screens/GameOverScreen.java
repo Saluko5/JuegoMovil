@@ -50,7 +50,7 @@ public class GameOverScreen implements Screen {
         this.nivel = nivel;
         System.out.println("nivel" + nivel);
 
-        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
         // ---
         backgroundTexture = new Texture(Gdx.files.internal("fondomenu.jpg")); // Ruta de la imagen de fondo
@@ -69,8 +69,8 @@ public class GameOverScreen implements Screen {
         BotonReinicio = new ImageButton(buttonStyle);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
-        BotonReinicio.setPosition(150, 400);
-        BotonReinicio.setSize(100, 100);
+        BotonReinicio.setPosition(100, 400);
+        BotonReinicio.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonReinicio.addListener(new ClickListener() {
@@ -108,8 +108,8 @@ public class GameOverScreen implements Screen {
         BotonMenu = new ImageButton(EstiloBtnMenu);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
-        BotonMenu.setPosition(150, 200);
-        BotonMenu.setSize(100, 100);
+        BotonMenu.setPosition(100, 200);
+        BotonMenu.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
         BotonMenu.addListener(new ClickListener() {
@@ -124,8 +124,8 @@ public class GameOverScreen implements Screen {
                 BotonMenu = new ImageButton(EstiloBtnMenu);
 
                 // Posicionar el botón en la pantalla (en este caso en el centro)
-                BotonMenu.setPosition(150, 200);
-                BotonMenu.setSize(100, 100);
+                BotonMenu.setPosition(100, 200);
+                BotonMenu.setSize(200, 100);
 
                 stage.addActor(BotonMenu);
 

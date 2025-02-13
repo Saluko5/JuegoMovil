@@ -36,7 +36,7 @@ public class PlataformaNormal extends Sprite {
         definePlataforma();
 
         plataformacuerpo = new TextureRegion(getTexture(), 15, 84, 225, 32);
-        setBounds(0.1f, 0.1f, 60 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
+        setBounds(0.1f, 0.1f, 90 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
         setRegion(plataformacuerpo);
     }
 
@@ -52,7 +52,7 @@ public class PlataformaNormal extends Sprite {
         // Con esto le damos la forma al "cuerpo"
         PolygonShape shape = new PolygonShape();
         // Y con esto le damos el tamaño
-        shape.setAsBox(30 / ProtaFinal.PPM, 10 / ProtaFinal.PPM); // esta a 20
+        shape.setAsBox(45 / ProtaFinal.PPM, 10 / ProtaFinal.PPM); // esta a 20
         fdef.filter.categoryBits = Main.LINEADENUBE_BIT;
         // fdef.filter.maskBits = Main.TIERRA_BIT | Main.PROTA_BIT |
         // Main.PLATAFORMA_BIT;

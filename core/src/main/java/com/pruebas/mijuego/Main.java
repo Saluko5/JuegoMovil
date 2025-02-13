@@ -2,6 +2,8 @@ package com.pruebas.mijuego;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import screens.LevelsMenu;
@@ -21,16 +23,20 @@ public class Main extends Game {
     public static final short PLATAFORMA_BIT = 4;
     public static final short LINEADENUBE_BIT = 8;
 
+    public static AssetManager manager;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
+        manager = new AssetManager();
+        manager.load("music/CancionMenu.mp3", Music.class);
+        manager.finishLoading();
         // setScreen(new WinScreen(this, 2));
         setScreen(new MainMenu(this));
     }
 
     @Override
     public void render() {
-
         super.render();
     }
 }
