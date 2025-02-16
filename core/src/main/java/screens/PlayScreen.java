@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
@@ -59,6 +58,9 @@ public class PlayScreen implements Screen {
     private WorldContactListener contacto;
     private ArrayList<PlataformaNormal> plataformas = new ArrayList<>();
     private ArrayList<PlataformaNube> plataformasnube = new ArrayList<>();
+
+    private Music music;
+    private Music sonido;
 
     // Constructor
     public PlayScreen(Main juego, int nivel) {
@@ -134,14 +136,9 @@ public class PlayScreen implements Screen {
                 y += 250;
             }
         }
-        // -------------------------
-        // int y = 200;
-        // for (int i = 0; i < 25; i++) {
-        // int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-        // plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
-        // y += 250;
-        // }
-        // gameover = new GameOverScreen(juego, this);
+        music = Main.manager.get("music/MusicaLvl1.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
 
     }
 
@@ -162,6 +159,9 @@ public class PlayScreen implements Screen {
             if (contacto.contacto) {
                 prota.b2body.setLinearVelocity(0, 0);
                 prota.b2body.applyLinearImpulse(new Vector2(0, 8f), prota.b2body.getWorldCenter(), true);
+                sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
+                sonido.setLooping(false);
+                sonido.play();
             }
         }
     }
@@ -195,20 +195,12 @@ public class PlayScreen implements Screen {
             hud.ActualizarPuntuacion(altitudMin);
         }
         if ((prota.b2body.getPosition().y > 80f) && !muerto) {
-            System.out.println("gane" + prota.b2body.getPosition().y);
             ganar = true;
         }
         if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
             muerto = true;
         }
 
-        if (prota.b2body.getPosition().x < 0) {
-            prota.setPosition(3.7f, prota.b2body.getPosition().y);
-            prota.b2body.setTransform(3.7f, prota.b2body.getPosition().y, prota.b2body.getAngle());
-        } else if (prota.b2body.getPosition().x > 3.7f) {
-            prota.setPosition(0f, prota.b2body.getPosition().y);
-            prota.b2body.setTransform(0f, prota.b2body.getPosition().y, prota.b2body.getAngle());
-        }
 
         if (Gdx.input.isTouched()) {
             // Conseguir la posición de toque en la pantalla
@@ -221,7 +213,6 @@ public class PlayScreen implements Screen {
             // Actualizar la posición del prota según las coordenadas del mundo
             prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y,
                     prota.b2body.getAngle());
-            System.out.println(touchPos.y);
         }
 
     }
@@ -256,11 +247,13 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
 
         if (muerto) {
+            music.dispose();
             Gdx.input.vibrate(1000, false);
             juego.setScreen(new GameOverScreen(juego, nivel));
             dispose();
         }
         if (ganar) {
+            music.dispose();
             juego.setScreen(new WinScreen(juego, nivel));
             dispose();
         }

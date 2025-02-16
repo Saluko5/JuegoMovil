@@ -1,6 +1,7 @@
 package Sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,6 +28,7 @@ public class PlataformaNube extends Sprite {
     float x;
     float y;
     ProtaFinal prota;
+    private Music sonido;
 
     public PlataformaNube(PlayScreen screen, float x, float y) {
         super(new Texture("plataformalvl2.png"), 250, 200);
@@ -34,7 +36,6 @@ public class PlataformaNube extends Sprite {
         this.world = screen.getWorld();
         this.x = x;
         this.y = y;
-        Gdx.app.log("coordenadas:" + x + "y: " + y, "");
         definePlataforma();
         prota = screen.prota;
 
@@ -69,10 +70,10 @@ public class PlataformaNube extends Sprite {
         // Creacion de la linea para la colision de desaparicion
         PolygonShape linea = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-29, 10).scl(1 / ProtaFinal.PPM);
-        vertice[1] = new Vector2(29, 10).scl(1 / ProtaFinal.PPM);
-        vertice[2] = new Vector2(-29, 0).scl(1 / ProtaFinal.PPM);
-        vertice[3] = new Vector2(29, 0).scl(1 / ProtaFinal.PPM);
+        vertice[0] = new Vector2(-27, 10).scl(1 / ProtaFinal.PPM);
+        vertice[1] = new Vector2(27f, 10).scl(1 / ProtaFinal.PPM);
+        vertice[2] = new Vector2(-27f, 0).scl(1 / ProtaFinal.PPM);
+        vertice[3] = new Vector2(27f, 0).scl(1 / ProtaFinal.PPM);
         linea.set(vertice);
 
         fdef.shape = linea;
@@ -107,10 +108,11 @@ public class PlataformaNube extends Sprite {
 
     public void pisada() {
         setToDestroy = true;
-        Gdx.app.log("plataforma nube", "");
         prota.b2body.setLinearVelocity(0, 0);
         prota.b2body.applyLinearImpulse(new Vector2(0, 8f),
                 prota.b2body.getWorldCenter(), true);
-        contacto = true;
+        sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
+        sonido.setLooping(false);
+        sonido.play();
     }
 }

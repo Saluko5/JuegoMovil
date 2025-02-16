@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,6 +43,7 @@ public class LevelsMenu implements Screen {
     private ImageButton BotonVolver;
 
     Main main;
+    private Music music;
 
     public LevelsMenu(Main main) {
         this.main = main;
@@ -65,13 +67,14 @@ public class LevelsMenu implements Screen {
         BotonLvl1 = new ImageButton(EstiloBtnLvl1);
 
         // Posicionar el botón en la pantalla
-        BotonLvl1.setPosition(30, 250);
-        BotonLvl1.setSize(150, 200);
+        BotonLvl1.setPosition(85, 350);
+        BotonLvl1.setSize(220, 210);
 
         // Añadir un listener al botón para el evento de clic
         BotonLvl1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 main.setScreen(new PlayScreen(main, 1));
                 dispose();
             }
@@ -89,13 +92,14 @@ public class LevelsMenu implements Screen {
         BotonLvl2 = new ImageButton(EstiloBtnLvl2);
 
         // Posicionar el botón en la pantalla
-        BotonLvl2.setPosition(200, 250);
-        BotonLvl2.setSize(170, 200);
+        BotonLvl2.setPosition(90, 125);
+        BotonLvl2.setSize(210, 200);
 
         // Añadir un listener al botón para el evento de clic
         BotonLvl2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 main.setScreen(new PlayScreen(main, 2));
                 dispose();
             }
@@ -120,12 +124,17 @@ public class LevelsMenu implements Screen {
         BotonVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 main.setScreen(new MainMenu(main));
                 dispose();
             }
         });
 
         stage.addActor(BotonVolver);
+
+        music = Main.manager.get("music/MusicLevels.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
 
         Gdx.input.setInputProcessor(stage);
 

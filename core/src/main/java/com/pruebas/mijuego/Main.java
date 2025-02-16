@@ -30,6 +30,12 @@ public class Main extends Game {
         batch = new SpriteBatch();
         manager = new AssetManager();
         manager.load("music/CancionMenu.mp3", Music.class);
+        manager.load("music/CancionGameOver.mp3", Music.class);
+        manager.load("music/CancionSettings.mp3", Music.class);
+        manager.load("music/SonidoSalto.mp3", Music.class);
+        manager.load("music/MusicaLvl1.mp3", Music.class);
+        manager.load("music/MusicaVictoria.mp3", Music.class);
+        manager.load("music/MusicLevels.mp3", Music.class);
         manager.finishLoading();
         // setScreen(new WinScreen(this, 2));
         setScreen(new MainMenu(this));

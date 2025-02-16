@@ -87,6 +87,7 @@ public class MainMenu implements Screen {
         BotonJugar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.stop();
                 juego.setScreen(new LevelsMenu(juego));
                 dispose();
             }
@@ -111,6 +112,7 @@ public class MainMenu implements Screen {
         BotonOptions.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.stop();
                 juego.setScreen(new OptionsScreen(juego));
                 dispose();
             }

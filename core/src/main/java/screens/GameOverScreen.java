@@ -52,7 +52,6 @@ public class GameOverScreen implements Screen {
     public GameOverScreen(Main main, int nivel) {
         this.main = main;
         this.nivel = nivel;
-        System.out.println("nivel" + nivel);
 
         viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
@@ -81,19 +80,7 @@ public class GameOverScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                buttonTexture = new Texture(Gdx.files.internal("BotonResetPress.png"));
-                buttonRegion = new TextureRegion(buttonTexture);
-
-                ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
-                buttonStyle.up = new TextureRegionDrawable(buttonRegion);
-
-                BotonReinicio = new ImageButton(buttonStyle);
-
-                // Posicionar el botón en la pantalla (en este caso en el centro)
-                BotonReinicio.setPosition(150, 400);
-                BotonReinicio.setSize(100, 100);
-
-                stage.addActor(BotonReinicio);
+                music.stop();
 
                 main.setScreen(new PlayScreen((main), nivel));
                 dispose();
@@ -119,19 +106,8 @@ public class GameOverScreen implements Screen {
         BotonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranjaPress.png"));
-                BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
 
-                ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
-                EstiloBtnMenu.up = new TextureRegionDrawable(BtnMenuRegion);
-
-                BotonMenu = new ImageButton(EstiloBtnMenu);
-
-                // Posicionar el botón en la pantalla (en este caso en el centro)
-                BotonMenu.setPosition(100, 200);
-                BotonMenu.setSize(200, 100);
-
-                stage.addActor(BotonMenu);
+                music.stop();
 
                 main.setScreen(new MainMenu((Main) main));
                 dispose();

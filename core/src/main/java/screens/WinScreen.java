@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,6 +36,7 @@ public class WinScreen implements Screen {
     private Texture TexturaBtnNext;
     private TextureRegion BtnNextRegion;
     private ImageButton BotonNext;
+    private Music music;
 
     Main main;
 
@@ -71,6 +73,7 @@ public class WinScreen implements Screen {
         BotonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 main.setScreen(new MainMenu((Main) main));
                 dispose();
             }
@@ -99,6 +102,7 @@ public class WinScreen implements Screen {
         BotonNext.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 main.setScreen(new PlayScreen(main, 2));
                 dispose();
             }
@@ -107,6 +111,10 @@ public class WinScreen implements Screen {
         stage.addActor(BotonNext);
 
         Gdx.input.setInputProcessor(stage);
+
+        music = Main.manager.get("music/MusicaVictoria.mp3", Music.class);
+        music.setLooping(false);
+        music.play();
 
     }
 
