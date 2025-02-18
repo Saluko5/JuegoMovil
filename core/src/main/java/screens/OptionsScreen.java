@@ -77,7 +77,7 @@ public class OptionsScreen implements Screen {
     public OptionsScreen(Main main) {
         this.main = main;
 
-        viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
 
         // Creo la imagen de fondo
@@ -286,15 +286,15 @@ public class OptionsScreen implements Screen {
         stage.addActor(BotonCerrar);
 
         // Creacion de la imagen del tutorial 1
-        TexturaTuto1 = new Texture(Gdx.files.internal("tituloJuego.png"));
+        TexturaTuto1 = new Texture(Gdx.files.internal("imagentuto1.png"));
         Tutorial1Region = new TextureRegion(TexturaTuto1);
 
         ImageButton.ImageButtonStyle EstiloTutorial = new ImageButton.ImageButtonStyle();
         EstiloTutorial.up = new TextureRegionDrawable(Tutorial1Region);
         Tutorial1 = new Image(TexturaTuto1);
 
-        Tutorial1.setSize(260, 550);
-        Tutorial1.setPosition(70, 75);
+        Tutorial1.setSize(560, 750);
+        Tutorial1.setPosition(-75, 0);
 
         Tutorial1.setVisible(false);
 

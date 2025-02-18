@@ -29,13 +29,18 @@ public class PlataformaNube extends Sprite {
     float y;
     ProtaFinal prota;
     private Music sonido;
+    boolean movilidad;
+    boolean atras = false;
+    boolean adelante = true;
+    float desplazamiento = 0f;
 
-    public PlataformaNube(PlayScreen screen, float x, float y) {
+    public PlataformaNube(PlayScreen screen, float x, float y, boolean movilidad) {
         super(new Texture("plataformalvl2.png"), 250, 200);
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
         this.y = y;
+        this.movilidad = movilidad;
         definePlataforma();
         prota = screen.prota;
 
@@ -114,5 +119,30 @@ public class PlataformaNube extends Sprite {
         sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
         sonido.setLooping(false);
         sonido.play();
+    }
+
+    public void Moviemiento(float cantidad) {
+        if (movilidad) {
+            if (atras) {
+                b2body.setTransform(new Vector2(b2body.getPosition().x - cantidad,
+                        b2body.getPosition().y),
+                        b2body.getAngle());
+                desplazamiento = desplazamiento - cantidad;
+                if (desplazamiento <= 0) {
+                    atras = false;
+                    adelante = true;
+                }
+            }
+            if (adelante) {
+                b2body.setTransform(new Vector2(b2body.getPosition().x + cantidad,
+                        b2body.getPosition().y),
+                        b2body.getAngle());
+                desplazamiento = desplazamiento + cantidad;
+                if (desplazamiento >= 1f) {
+                    adelante = false;
+                    atras = true;
+                }
+            }
+        }
     }
 }

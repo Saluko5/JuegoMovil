@@ -2,6 +2,8 @@ package screens;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
@@ -62,6 +65,9 @@ public class PlayScreen implements Screen {
     private Music music;
     private Music sonido;
 
+    Timer timer;
+    TimerTask tarea;
+
     // Constructor
     public PlayScreen(Main juego, int nivel) {
 
@@ -73,13 +79,13 @@ public class PlayScreen implements Screen {
         // Crea la camara q sigue al marciano
         gamecam = new OrthographicCamera();
 
-        gamePort = new FitViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
+        gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
 
         // Sirve para el hud del tiempo y el nivel
         hud = new Hud(juego.batch, altitudMin);
 
         // Creacion del mundo
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -5), true);
         b2dr = new Box2DDebugRenderer();
 
         // Creacion del protagonista
@@ -102,37 +108,66 @@ public class PlayScreen implements Screen {
 
         if (nivel == 1) {
 
-            int xtemp = rdm.nextInt(60, 140);
-            int xtemp2 = rdm.nextInt(240, 340);
-            int n = rdm.nextInt(1, 3);
-            if (n == 1) {
-                plataformas.add(new PlataformaNormal(this, xtemp, 250, false));
+            int xtemp = 0;
+            while (xtemp < 60) {
+                xtemp = rdm.nextInt(140);
+            }
+            int xtemp2 = 0;
+            while (xtemp2 < 240) {
+                xtemp2 = rdm.nextInt(340);
+            }
+            int n = rdm.nextInt(2);
+            if (n == 0) {
+                plataformas.add(new PlataformaNormal(this, xtemp, 250, true));
             } else {
                 plataformas.add(new PlataformaNormal(this, xtemp2, 250, false));
             }
 
             int y = 550;
             for (int i = 0; i < 30; i++) {
-                int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-                plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
+                int x = 0;
+                while (x < 60) {
+                    x = rdm.nextInt(340);
+                }
+                int n2 = rdm.nextInt(2);
+                if (n2 == 0) {
+                    plataformas.add(new PlataformaNormal(this, x, y, true)); // primer y 200
+                } else {
+                    plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
+                }
                 y += 250;
             }
 
         } else {
             // Para el nivel 2
-            int xtemp = rdm.nextInt(60, 140);
-            int xtemp2 = rdm.nextInt(240, 340);
-            int n = rdm.nextInt(1, 3);
+            int xtemp = 0;
+            while (xtemp < 60) {
+                xtemp = rdm.nextInt(140);
+            }
+            int xtemp2 = 0;
+            while (xtemp2 < 240) {
+                xtemp2 = rdm.nextInt(340);
+            }
+            int n = rdm.nextInt(2);
             if (n == 1) {
-                plataformasnube.add(new PlataformaNube(this, xtemp, 250));
+                plataformasnube.add(new PlataformaNube(this, xtemp, 250, true));
             } else {
-                plataformasnube.add(new PlataformaNube(this, xtemp2, 250));
+                plataformasnube.add(new PlataformaNube(this, xtemp2, 250, false));
             }
 
             int y = 550;
             for (int i = 0; i < 30; i++) {
-                int x = rdm.nextInt(60, 340); // 60 minimo maximo 340 x
-                plataformasnube.add(new PlataformaNube(this, x, y)); // primer y 200
+                int x = 0;
+                while (x < 60) {
+                    x = rdm.nextInt(340);
+                }
+                int n2 = rdm.nextInt(2);
+                if (n2 == 1) {
+                    plataformasnube.add(new PlataformaNube(this, x, y, true)); // primer y 200
+                } else {
+                    plataformasnube.add(new PlataformaNube(this, x, y, false)); // primer y 200
+                }
+
                 y += 250;
             }
         }
@@ -140,6 +175,25 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
 
+        timer = new Timer();
+
+        tarea = new TimerTask() {
+            @Override
+            public void run() {
+                if (nivel == 1) {
+                    for (int i = 0; i < plataformas.size(); i++) {
+                        plataformas.get(i).Moviemiento(0.03f);
+                    }
+                } else {
+                    for (int i = 0; i < plataformasnube.size(); i++) {
+                        plataformasnube.get(i).Moviemiento(0.03f);
+                    } 
+                }
+            }
+        };
+
+        // Ejecuta la tarea cada 200 milisegundos, sin retraso inicial
+        timer.scheduleAtFixedRate(tarea, 0, 50);
     }
 
     public TextureAtlas getAtlas() {
@@ -158,7 +212,7 @@ public class PlayScreen implements Screen {
         if (!muerto) {
             if (contacto.contacto) {
                 prota.b2body.setLinearVelocity(0, 0);
-                prota.b2body.applyLinearImpulse(new Vector2(0, 8f), prota.b2body.getWorldCenter(), true);
+                prota.b2body.applyLinearImpulse(new Vector2(0, 5.5f), prota.b2body.getWorldCenter(), true);
                 sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
                 sonido.setLooping(false);
                 sonido.play();
@@ -200,7 +254,6 @@ public class PlayScreen implements Screen {
         if (prota.b2body.getPosition().y < altitudMin / ProtaFinal.PPM && !muerto) {
             muerto = true;
         }
-
 
         if (Gdx.input.isTouched()) {
             // Conseguir la posición de toque en la pantalla
@@ -247,12 +300,14 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
 
         if (muerto) {
+            timer.cancel();
             music.dispose();
             Gdx.input.vibrate(1000, false);
             juego.setScreen(new GameOverScreen(juego, nivel));
             dispose();
         }
         if (ganar) {
+            timer.cancel();
             music.dispose();
             juego.setScreen(new WinScreen(juego, nivel));
             dispose();
@@ -290,6 +345,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+        timer.cancel();
         map.dispose();
         renderer.dispose();
         world.dispose();

@@ -23,8 +23,10 @@ public class PlataformaNormal extends Sprite {
     float x;
     float y;
     boolean movilidad;
-    float desplazamiento = 1f;
+    private float desplazamiento = 0f;
     int contador = 0;
+    boolean adelante = true;
+    boolean atras = false;
 
     public PlataformaNormal(PlayScreen screen, float x, float y, boolean movilidad) {
         super(new Texture("plataformalvl1.png"), 250, 200);
@@ -70,17 +72,32 @@ public class PlataformaNormal extends Sprite {
         setPosition((b2body.getPosition().x) - getWidth() / 2,
                 (b2body.getPosition().y) - getHeight() / 2);
         setRegion(plataformacuerpo);
+    }
 
+    public void Moviemiento(float cantidad) {
         if (movilidad) {
-            if (desplazamiento > 0) {
-                x += 0.01f;
-                desplazamiento -= 0.01f;
-            } else {
-                desplazamiento += 0.01f;
-                x -= 0.01f;
+            if (atras) {
+                b2body.setTransform(new Vector2(b2body.getPosition().x - cantidad,
+                        b2body.getPosition().y),
+                        b2body.getAngle());
+                desplazamiento = desplazamiento - cantidad;
+                if (desplazamiento <= 0) {
+                    atras = false;
+                    adelante = true;
+                }
             }
-            b2body.setTransform(x, b2body.getPosition().y, b2body.getAngle());
+            if (adelante) {
+                b2body.setTransform(new Vector2(b2body.getPosition().x + cantidad,
+                        b2body.getPosition().y),
+                        b2body.getAngle());
+                desplazamiento = desplazamiento + cantidad;
+                if (desplazamiento >= 1f) {
+                    adelante = false;
+                    atras = true;
+                }
+            }
         }
+
     }
 
     public void pisada() {

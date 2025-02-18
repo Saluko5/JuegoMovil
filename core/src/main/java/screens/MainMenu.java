@@ -60,7 +60,7 @@ public class MainMenu implements Screen {
     public MainMenu(Main juego) {
         this.juego = juego;
 
-        viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
+        viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) juego).batch);
 
         // Creacion del fondo del menu
