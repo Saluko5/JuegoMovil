@@ -2,8 +2,6 @@ package screens;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -65,8 +63,15 @@ public class PlayScreen implements Screen {
     private Music music;
     private Music sonido;
 
-    Timer timer;
-    TimerTask tarea;
+    // Definir un intervalo en segundos (200 ms)
+    private float intervaloMovimiento = 0.03f; // 200 ms = 0.2 segundos
+    private float tiempoAcumulado = 0f; // Acumula el tiempo transcurrido
+
+    // Tiempo en el que se pasa el nivel
+    private float tiempoTranscurrido; // Variable para el tiempo
+
+    // Timer timer;
+    // TimerTask tarea;
 
     // Constructor
     public PlayScreen(Main juego, int nivel) {
@@ -82,7 +87,10 @@ public class PlayScreen implements Screen {
         gamePort = new StretchViewport(Main.V_WIDTH / ProtaFinal.PPM, Main.V_HEIGHT / ProtaFinal.PPM, gamecam);
 
         // Sirve para el hud del tiempo y el nivel
-        hud = new Hud(juego.batch, altitudMin);
+        this.tiempoTranscurrido = 0;
+
+        // Creamos el HUD
+        hud = new Hud(juego.batch);
 
         // Creacion del mundo
         world = new World(new Vector2(0, -5), true);
@@ -106,6 +114,7 @@ public class PlayScreen implements Screen {
         contacto = new WorldContactListener();
         world.setContactListener(contacto);
 
+        // Aqui creamos las plataformas dependiendo del nivel en el que esters
         if (nivel == 1) {
 
             int xtemp = 0;
@@ -139,7 +148,7 @@ public class PlayScreen implements Screen {
             }
 
         } else {
-            // Para el nivel 2
+            // Creacion de plataformas para el nivel 2
             int xtemp = 0;
             while (xtemp < 60) {
                 xtemp = rdm.nextInt(140);
@@ -171,29 +180,12 @@ public class PlayScreen implements Screen {
                 y += 250;
             }
         }
+
+        // Se pone musica a la hora de acceder a la partida
         music = Main.manager.get("music/MusicaLvl1.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(juego.volumen);
         music.play();
-
-        timer = new Timer();
-
-        tarea = new TimerTask() {
-            @Override
-            public void run() {
-                if (nivel == 1) {
-                    for (int i = 0; i < plataformas.size(); i++) {
-                        plataformas.get(i).Moviemiento(0.03f);
-                    }
-                } else {
-                    for (int i = 0; i < plataformasnube.size(); i++) {
-                        plataformasnube.get(i).Moviemiento(0.03f);
-                    } 
-                }
-            }
-        };
-
-        // Ejecuta la tarea cada 200 milisegundos, sin retraso inicial
-        timer.scheduleAtFixedRate(tarea, 0, 50);
     }
 
     public TextureAtlas getAtlas() {
@@ -207,14 +199,16 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float dt) {
 
-        // Moviemiento
-
+        // Movimiento
         if (!muerto) {
+            //Si no esta muerto y hay contacto entra
             if (contacto.contacto) {
+                //Le quita la velocidad de impulso y le da una nueva, esto se hace para que no se multiplique la velocidad de salto
                 prota.b2body.setLinearVelocity(0, 0);
                 prota.b2body.applyLinearImpulse(new Vector2(0, 5.5f), prota.b2body.getWorldCenter(), true);
                 sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
                 sonido.setLooping(false);
+                sonido.setVolume(Main.volumen);
                 sonido.play();
             }
         }
@@ -223,31 +217,56 @@ public class PlayScreen implements Screen {
     public void update(float dt) {
         handleInput(dt);
 
-        world.step(1 / 60f, 6, 2);
+        // Actualizamos el mundo con un paso de tiempo fijo
+        world.step(1 / 60f, 6, 2); // Esto mantiene el juego a 60 FPS fijo
 
         gamecam.update();
-
         prota.update(dt);
 
-        for (int i = 0; i < plataformas.size(); i++) {
-            plataformas.get(i).update(dt);
+        // Acumulamos el tiempo transcurrido
+        tiempoAcumulado += dt;
+
+        // Si el tiempo acumulado es mayor o igual al intervalo de movimiento (200ms),
+        // movemos las plataformas
+        if (tiempoAcumulado >= intervaloMovimiento) {
+            // Mover las plataformas
+            if (nivel == 1) {
+                for (PlataformaNormal plataforma : plataformas) {
+                    plataforma.Moviemiento(0.03f); // Aquí sigues utilizando tu lógica de movimiento
+                }
+            } else {
+                for (PlataformaNube plataforma : plataformasnube) {
+                    plataforma.Moviemiento(0.03f); // Lo mismo para las plataformas de nube
+                }
+            }
+
+            // Resetear el tiempo acumulado
+            tiempoAcumulado = 0f;
         }
 
-        // ---------------
-        for (int i = 0; i < plataformasnube.size(); i++) {
-            plataformasnube.get(i).update(dt);
+        // Actualizar las plataformas (por si necesitas un movimiento continuo por
+        // deltaTime)
+        for (PlataformaNormal plataforma : plataformas) {
+            plataforma.update(dt);
         }
 
-        // rederizar el mapa del juego
+        for (PlataformaNube plataforma : plataformasnube) {
+            plataforma.update(dt);
+        }
+
+        hud.actualizarTiempo(dt);
+
+        // Renders y actualización de la cámara
         renderer.setView(gamecam);
 
+        // Control de la cámara y del HUD
         if (prota.b2body.getPosition().y > altidudMax / ProtaFinal.PPM && !muerto
                 && prota.b2body.getPosition().y < 76.2f) {
             gamecam.position.y = prota.b2body.getPosition().y;
             altidudMax = prota.b2body.getPosition().y * ProtaFinal.PPM;
             altitudMin = (prota.b2body.getPosition().y * ProtaFinal.PPM) - 350;
-            hud.ActualizarPuntuacion(altitudMin);
         }
+
         if ((prota.b2body.getPosition().y > 80f) && !muerto) {
             ganar = true;
         }
@@ -255,17 +274,12 @@ public class PlayScreen implements Screen {
             muerto = true;
         }
 
+        // Manejo de entrada táctil
         if (Gdx.input.isTouched()) {
-            // Conseguir la posición de toque en la pantalla
             float xTouchPixel = Gdx.input.getX();
-
-            // Convertir las coordenadas de pantalla a coordenadas del mundo
             Vector3 touchPos = new Vector3(xTouchPixel, prota.b2body.getPosition().y, 0);
             gamecam.unproject(touchPos);
-
-            // Actualizar la posición del prota según las coordenadas del mundo
-            prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y,
-                    prota.b2body.getAngle());
+            prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y, prota.b2body.getAngle());
         }
 
     }
@@ -274,18 +288,23 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
+        // Liempieza de pantalla
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Para que rederice
         renderer.render();
 
         // Para renderizar las colisiones del mapa y del personaje
-        b2dr.render(world, gamecam.combined);
+        // b2dr.render(world, gamecam.combined);
+
+        // Renderizar el HUD
 
         juego.batch.setProjectionMatrix(gamecam.combined);
         juego.batch.begin();
         prota.draw(juego.batch);
 
+        // Para pintar las plataformas
         for (int i = 0; i < plataformas.size(); i++) {
             plataformas.get(i).draw(juego.batch);
         }
@@ -297,20 +316,29 @@ public class PlayScreen implements Screen {
         juego.batch.end();
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
+        // Dibujar el HUD
         hud.stage.draw();
 
+        // Si esta muerto vibra y pasa a la pantalla de GameOver
         if (muerto) {
-            timer.cancel();
-            music.dispose();
-            Gdx.input.vibrate(1000, false);
+            Gdx.input.vibrate(1000, true);
             juego.setScreen(new GameOverScreen(juego, nivel));
             dispose();
-        }
-        if (ganar) {
-            timer.cancel();
+            music.stop();
             music.dispose();
+        }
+
+        // Si gana pasa a la pantalla, se pasa los records y se para la musica
+        if (ganar) {
+            if (nivel == 1) {
+                juego.meterRecordlvl1(hud.tiempoTranscurrido);
+            } else {
+                juego.meterRecordlvl2(hud.tiempoTranscurrido);
+            }
             juego.setScreen(new WinScreen(juego, nivel));
             dispose();
+            music.stop();
+            music.dispose();
         }
     }
 
@@ -345,7 +373,6 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        timer.cancel();
         map.dispose();
         renderer.dispose();
         world.dispose();

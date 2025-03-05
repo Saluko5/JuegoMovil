@@ -4,20 +4,28 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
+
+import Manager.LanguageManager;
 
 public class WinScreen implements Screen {
 
@@ -29,19 +37,30 @@ public class WinScreen implements Screen {
 
     // Para hacer boton menu
     private Texture TexturaBtnMenu;
-    private TextureRegion BtnMenuRegion;
-    private ImageButton BotonMenu;
+    private TextButton BotonMenu;
+
+    private BitmapFont font;
 
     // Creacion de boton siguiente nivel
     private Texture TexturaBtnNext;
-    private TextureRegion BtnNextRegion;
-    private ImageButton BotonNext;
+    private TextButton BotonNext;
+
     private Music music;
 
     Main main;
 
     public WinScreen(Main main, int nivel) {
         this.main = main;
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/font.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.genMipMaps = true;
+        parameter.color = Color.WHITE;
+        parameter.size = (int) Math.ceil(28);
+        parameter.magFilter = TextureFilter.Linear;
+        parameter.minFilter = TextureFilter.MipMapLinearNearest;
+        font = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose();
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
@@ -53,13 +72,15 @@ public class WinScreen implements Screen {
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Ahora hare el boton que me lleve al menu
-        TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranja.png"));
-        BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
+        TexturaBtnMenu = new Texture(Gdx.files.internal("BtnDefault.png"));
+        TextureRegionDrawable botonmenu = new TextureRegionDrawable(TexturaBtnMenu);
 
-        ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
-        EstiloBtnMenu.up = new TextureRegionDrawable(BtnMenuRegion);
+        TextButton.TextButtonStyle EstiloBtnMenu = new TextButton.TextButtonStyle();
+        EstiloBtnMenu.font = font;
+        EstiloBtnMenu.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnMenu.up = botonmenu;
 
-        BotonMenu = new ImageButton(EstiloBtnMenu);
+        BotonMenu = new TextButton("MENU", EstiloBtnMenu);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
         if (nivel == 1) {
@@ -75,6 +96,7 @@ public class WinScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 music.dispose();
                 main.setScreen(new MainMenu((Main) main));
+                music.setVolume(main.volumen);
                 dispose();
             }
         });
@@ -82,13 +104,15 @@ public class WinScreen implements Screen {
         stage.addActor(BotonMenu);
 
         // Creacion del boton para jugar al lvl2
-        TexturaBtnNext = new Texture(Gdx.files.internal("BtnNextLvl.png"));
-        BtnNextRegion = new TextureRegion(TexturaBtnNext);
+        TexturaBtnNext = new Texture(Gdx.files.internal("BtnDefault.png"));
+        TextureRegionDrawable botonnext = new TextureRegionDrawable(TexturaBtnNext);
 
-        ImageButton.ImageButtonStyle EstiloBtnNext = new ImageButton.ImageButtonStyle();
-        EstiloBtnNext.up = new TextureRegionDrawable(BtnNextRegion);
+        TextButton.TextButtonStyle EstiloBtnNext = new TextButton.TextButtonStyle();
+        EstiloBtnNext.font = font;
+        EstiloBtnNext.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnNext.up = botonnext;
 
-        BotonNext = new ImageButton(EstiloBtnNext);
+        BotonNext = new TextButton(LanguageManager.get("next"), EstiloBtnNext);
 
         // Posicionar el botón en la pantalla
         BotonNext.setPosition(100, 370);
@@ -114,6 +138,7 @@ public class WinScreen implements Screen {
 
         music = Main.manager.get("music/MusicaVictoria.mp3", Music.class);
         music.setLooping(false);
+        music.setVolume(main.volumen);
         music.play();
 
     }
@@ -125,6 +150,7 @@ public class WinScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        //Liempieza de pantalla
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

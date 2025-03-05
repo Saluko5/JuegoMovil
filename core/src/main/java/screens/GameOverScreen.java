@@ -1,5 +1,7 @@
 package screens;
 
+import org.w3c.dom.Text;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,8 +10,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -25,23 +30,27 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
+import Manager.LanguageManager;
 import Sprites.ProtaFinal;
 
 public class GameOverScreen implements Screen {
 
     private Viewport viewport;
     private Stage stage;
-    private Texture buttonTexture;
-    private TextureRegion buttonRegion;
-    private ImageButton BotonReinicio;
 
+    // Para hacer boton reiniciar
+    private Texture TexturaBtnReinicio;
+    private TextButton BotonReinicio;
+
+    // para hacer boton menu
     private Texture TexturaBtnMenu;
-    private TextureRegion BtnMenuRegion;
-    private ImageButton BotonMenu;
-    // private Game game;
+    private TextButton BotonMenu;
+
     int nivel;
     public boolean inicio = false;
     Main main;
+
+    private BitmapFont font;
 
     // Para la musica
     private Music music;
@@ -53,6 +62,16 @@ public class GameOverScreen implements Screen {
         this.main = main;
         this.nivel = nivel;
 
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/font.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.genMipMaps = true;
+        parameter.color = Color.WHITE;
+        parameter.size = (int) Math.ceil(30);
+        parameter.magFilter = TextureFilter.Linear;
+        parameter.minFilter = TextureFilter.MipMapLinearNearest;
+        font = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose();
+
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) main).batch);
         // ---
@@ -63,13 +82,16 @@ public class GameOverScreen implements Screen {
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Boton de reinicio
-        buttonTexture = new Texture(Gdx.files.internal("BotonReset.png"));
-        buttonRegion = new TextureRegion(buttonTexture);
+        TexturaBtnReinicio = new Texture(Gdx.files.internal("BtnDefault.png"));
 
-        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
-        buttonStyle.up = new TextureRegionDrawable(buttonRegion);
+        TextureRegionDrawable botonrei = new TextureRegionDrawable(TexturaBtnReinicio);
 
-        BotonReinicio = new ImageButton(buttonStyle);
+        TextButton.TextButtonStyle EstiloBtnRei = new TextButton.TextButtonStyle();
+        EstiloBtnRei.font = font;
+        EstiloBtnRei.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnRei.up = botonrei;
+
+        BotonReinicio = new TextButton(LanguageManager.get("restart"), EstiloBtnRei);
 
         // Posicionar el botón en la pantalla (en este caso en el centro)
         BotonReinicio.setPosition(100, 400);
@@ -90,14 +112,16 @@ public class GameOverScreen implements Screen {
         stage.addActor(BotonReinicio);
         // -----------------------------------------------------------
         // Ahora hare el boton que me lleve al menu
-        TexturaBtnMenu = new Texture(Gdx.files.internal("BotonMenuNaranja.png"));
-        BtnMenuRegion = new TextureRegion(TexturaBtnMenu);
+        TexturaBtnMenu = new Texture(Gdx.files.internal("BtnDefault.png"));
 
-        ImageButton.ImageButtonStyle EstiloBtnMenu = new ImageButton.ImageButtonStyle();
-        EstiloBtnMenu.up = new TextureRegionDrawable(BtnMenuRegion);
+        TextureRegionDrawable botonmenu = new TextureRegionDrawable(TexturaBtnMenu);
 
-        BotonMenu = new ImageButton(EstiloBtnMenu);
+        TextButton.TextButtonStyle EstiloBtnMenu = new TextButton.TextButtonStyle();
+        EstiloBtnMenu.font = font;
+        EstiloBtnMenu.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnMenu.up = botonmenu;
 
+        BotonMenu = new TextButton("MENU", EstiloBtnMenu);
         // Posicionar el botón en la pantalla (en este caso en el centro)
         BotonMenu.setPosition(100, 200);
         BotonMenu.setSize(200, 100);
@@ -120,6 +144,7 @@ public class GameOverScreen implements Screen {
 
         music = Main.manager.get("music/CancionGameOver.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(main.volumen);
         music.play();
     }
 

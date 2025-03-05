@@ -16,6 +16,7 @@ import screens.PlayScreen;
 public class B2WorldCreator {
 
     public B2WorldCreator(PlayScreen screen) {
+        //Para la creacion del mundo
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
 

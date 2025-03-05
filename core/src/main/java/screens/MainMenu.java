@@ -4,10 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
 
+import Manager.LanguageManager;
 import Sprites.ProtaFinal;
 
 public class MainMenu implements Screen {
@@ -36,20 +43,21 @@ public class MainMenu implements Screen {
     private Texture backgroundTexture; // Añadido para la imagen de fondo
     private Image backgroundImage;
 
+    // Para la fuente
+    private BitmapFont font;
+    private BitmapFont font2;
+
     // Creacion de boton jugar
     private Texture TexturaBtnJugar;
-    private TextureRegion BtnJugarRegion;
-    private ImageButton BotonJugar;
+    private TextButton BotonJugar;
 
     // Creacion del boton options
     private Texture TexturaBtnOptions;
-    private TextureRegion BtnOptionsRegion;
-    private ImageButton BotonOptions;
+    private TextButton BotonOptions;
 
     // Creacion del boton Salir
     private Texture TexturaBtnExit;
-    private TextureRegion BtnExitRegion;
-    private ImageButton BotonExit;
+    private TextButton BotonExit;
 
     private Texture TexturaTitulo;
     private TextureRegion TituloRegion;
@@ -59,6 +67,17 @@ public class MainMenu implements Screen {
 
     public MainMenu(Main juego) {
         this.juego = juego;
+
+        //Se crea la fuente para las labels
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/font.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.genMipMaps = true;
+        parameter.color = Color.WHITE;
+        parameter.size = (int) Math.ceil(40);
+        parameter.magFilter = TextureFilter.Linear;
+        parameter.minFilter = TextureFilter.MipMapLinearNearest;
+        font = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose();
 
         viewport = new StretchViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) juego).batch);
@@ -71,13 +90,15 @@ public class MainMenu implements Screen {
         stage.addActor(backgroundImage); // Añadir la imagen al stage
 
         // Creacion del boton para jugar
-        TexturaBtnJugar = new Texture(Gdx.files.internal("BotonJugar.png"));
-        BtnJugarRegion = new TextureRegion(TexturaBtnJugar);
+        TexturaBtnJugar = new Texture(Gdx.files.internal("BtnDefault.png"));
+        TextureRegionDrawable botonjugar = new TextureRegionDrawable(TexturaBtnJugar);
 
-        ImageButton.ImageButtonStyle EstiloBtnJugar = new ImageButton.ImageButtonStyle();
-        EstiloBtnJugar.up = new TextureRegionDrawable(BtnJugarRegion);
+        TextButton.TextButtonStyle EstiloBtnJugar = new TextButton.TextButtonStyle();
+        EstiloBtnJugar.font = font;
+        EstiloBtnJugar.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnJugar.up = botonjugar;
 
-        BotonJugar = new ImageButton(EstiloBtnJugar);
+        BotonJugar = new TextButton(LanguageManager.get("play"), EstiloBtnJugar);
 
         // Posicionar el botón en la pantalla
         BotonJugar.setPosition(100, 370);
@@ -96,16 +117,19 @@ public class MainMenu implements Screen {
         stage.addActor(BotonJugar);
 
         // Creacion del boton options
-        TexturaBtnOptions = new Texture(Gdx.files.internal("BotonOptions.png"));
-        BtnOptionsRegion = new TextureRegion(TexturaBtnOptions);
+        // Creacion del boton para jugar
+        TexturaBtnOptions = new Texture(Gdx.files.internal("BtnDefault.png"));
+        TextureRegionDrawable botonoptions = new TextureRegionDrawable(TexturaBtnOptions);
 
-        ImageButton.ImageButtonStyle EstiloBtnOptions = new ImageButton.ImageButtonStyle();
-        EstiloBtnOptions.up = new TextureRegionDrawable(BtnOptionsRegion);
+        TextButton.TextButtonStyle EstiloBtnOptions = new TextButton.TextButtonStyle();
+        EstiloBtnOptions.font = font;
+        EstiloBtnOptions.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
+        EstiloBtnOptions.up = botonoptions;
 
-        BotonOptions = new ImageButton(EstiloBtnOptions);
+        BotonOptions = new TextButton(LanguageManager.get("options"), EstiloBtnJugar);
 
         // Posicionar el botón en la pantalla
-        BotonOptions.setPosition(100, 250);
+        BotonOptions.setPosition(100, 240);
         BotonOptions.setSize(200, 100);
 
         // Añadir un listener al botón para el evento de clic
@@ -121,19 +145,27 @@ public class MainMenu implements Screen {
         stage.addActor(BotonOptions);
 
         // Creacion del boton salir
-        TexturaBtnExit = new Texture(Gdx.files.internal("BotonExit.png"));
-        BtnExitRegion = new TextureRegion(TexturaBtnExit);
+        TexturaBtnExit = new Texture("BtnDefault.png");
+        TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(TexturaBtnExit);
 
-        ImageButton.ImageButtonStyle EstiloBtnExit = new ImageButton.ImageButtonStyle();
-        EstiloBtnExit.up = new TextureRegionDrawable(BtnExitRegion);
+        // Crear un TextButton con el texto
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
 
-        BotonExit = new ImageButton(EstiloBtnExit);
+        // Asignar la imagen de fondo
+        style.up = buttonDrawable; // Asignar el fondo del botón
 
-        // Posicionar el botón en la pantalla
-        BotonExit.setPosition(100, 120);
-        BotonExit.setSize(200, 100);
+        // Asignar el texto y la fuente
+        style.font = font;
+        style.fontColor = com.badlogic.gdx.graphics.Color.WHITE;
 
-        // Añadir un listener al botón para el evento de clic
+        // Crear el botón con texto
+        BotonExit = new TextButton(LanguageManager.get("exit"), style);
+        BotonExit.setSize(200, 110); // Tamaño del botón
+
+        // Establecer la posición del botón
+        BotonExit.setPosition(100, 100);
+
+        // Agregar un escuchador para manejar clics
         BotonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -141,6 +173,7 @@ public class MainMenu implements Screen {
             }
         });
 
+        // Agregar el botón al stage
         stage.addActor(BotonExit);
 
         // Creacion del boton para jugar
@@ -157,11 +190,12 @@ public class MainMenu implements Screen {
         stage.addActor(titulo);
 
         // Textura del titulo del juego
-
         Gdx.input.setInputProcessor(stage);
 
+        //Se pone la musica
         music = Main.manager.get("music/CancionMenu.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(Main.volumen);
         music.play();
     }
 
@@ -172,6 +206,7 @@ public class MainMenu implements Screen {
     @Override
     public void render(float delta) {
 
+        //Limpieza de dibujo
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

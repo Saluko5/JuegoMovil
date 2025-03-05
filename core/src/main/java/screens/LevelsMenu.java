@@ -134,6 +134,7 @@ public class LevelsMenu implements Screen {
 
         music = Main.manager.get("music/MusicLevels.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(main.volumen);
         music.play();
 
         Gdx.input.setInputProcessor(stage);

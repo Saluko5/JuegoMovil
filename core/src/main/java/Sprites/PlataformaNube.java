@@ -45,7 +45,7 @@ public class PlataformaNube extends Sprite {
         prota = screen.prota;
 
         plataformacuerpo = new TextureRegion(getTexture(), 0, 80, 255, 40);
-        setBounds(0.1f, 0.1f, 80 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
+        setBounds(0.1f, 0.1f, 90 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
         setRegion(plataformacuerpo);
 
         setToDestroy = false;
@@ -82,7 +82,6 @@ public class PlataformaNube extends Sprite {
         linea.set(vertice);
 
         fdef.shape = linea;
-        // fdef.restitution = 1.5f; // Con esto hago que cuando salte encima se impulso
         // con la fuerza que marco
         fdef.filter.categoryBits = Main.PLATAFORMA_BIT;
         b2body.createFixture(fdef).setUserData(this);
@@ -95,6 +94,7 @@ public class PlataformaNube extends Sprite {
         float posY = b2body.getPosition().y * ProtaFinal.PPM;
         posY = posY - 10;
 
+        //Creacion de la textura y la colision de la plataforma
         setPosition((b2body.getPosition().x) - getWidth() / 2,
                 (b2body.getPosition().y) - getHeight() / 2);
         if (setToDestroy && !destroyed) {
@@ -111,16 +111,19 @@ public class PlataformaNube extends Sprite {
         }
     }
 
+    //Metodo que salta cuando el jugador pisa el suelo
     public void pisada() {
         setToDestroy = true;
         prota.b2body.setLinearVelocity(0, 0);
-        prota.b2body.applyLinearImpulse(new Vector2(0, 8f),
+        prota.b2body.applyLinearImpulse(new Vector2(0, 5.8f),
                 prota.b2body.getWorldCenter(), true);
         sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
         sonido.setLooping(false);
         sonido.play();
     }
 
+
+    //Funcion que sirve para mover la plataforma y su body 
     public void Moviemiento(float cantidad) {
         if (movilidad) {
             if (atras) {
