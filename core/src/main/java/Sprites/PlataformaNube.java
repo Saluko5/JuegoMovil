@@ -34,8 +34,8 @@ public class PlataformaNube extends Sprite {
     boolean adelante = true;
     float desplazamiento = 0f;
 
-    public PlataformaNube(PlayScreen screen, float x, float y, boolean movilidad) {
-        super(new Texture("plataformalvl2.png"), 250, 200);
+    public PlataformaNube(PlayScreen screen, float x, float y, boolean movilidad,boolean lado,String textura) {
+        super(new Texture(textura), 250, 200);
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
@@ -43,6 +43,15 @@ public class PlataformaNube extends Sprite {
         this.movilidad = movilidad;
         definePlataforma();
         prota = screen.prota;
+
+        if (lado) {
+            this.adelante = true;  // Se mueve hacia la derecha
+            this.atras = false;
+        } else {
+            this.adelante = false;  // Se mueve hacia la izquierda
+            this.atras = true;
+            desplazamiento = 1f;
+        }
 
         plataformacuerpo = new TextureRegion(getTexture(), 0, 80, 255, 40);
         setBounds(0.1f, 0.1f, 90 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);

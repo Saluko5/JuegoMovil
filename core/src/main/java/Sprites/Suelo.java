@@ -15,11 +15,12 @@ public class Suelo extends InteractiveTileObject {
         fixture.setUserData(this);
     }
 
+    //Metodo que salta cada vez q se golpea con los pies
     @Override
     public void golpePies() {
-        Gdx.app.log("suelo", "");
     }
 
+    //Metodo no usado
     @Override
     public void golpeCabeza() {
         throw new UnsupportedOperationException("Unimplemented method 'golpeCabeza'");

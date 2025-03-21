@@ -16,7 +16,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pruebas.mijuego.Main;
@@ -24,7 +23,6 @@ import com.pruebas.mijuego.Main;
 import Sprites.PlataformaNormal;
 import Sprites.PlataformaNube;
 import Sprites.ProtaFinal;
-
 import scenes.Hud;
 import tools.B2WorldCreator;
 import tools.WorldContactListener;
@@ -50,6 +48,8 @@ public class PlayScreen implements Screen {
     private float altidudMax = 350;
     public float altitudMin = 0;
     public Random rdm = new Random();
+
+    private float sensibilidad = 0.5f; // Sensibilidad del giroscopio
 
     private TextureAtlas atlas;
 
@@ -127,9 +127,15 @@ public class PlayScreen implements Screen {
             }
             int n = rdm.nextInt(2);
             if (n == 0) {
-                plataformas.add(new PlataformaNormal(this, xtemp, 250, true));
+                n = rdm.nextInt(2);
+                if (n == 0) {
+                    plataformas.add(new PlataformaNormal(this, xtemp, 250, true, true));
+                } else {
+                    plataformas.add(new PlataformaNormal(this, xtemp2, 250, true, false));
+                }
+
             } else {
-                plataformas.add(new PlataformaNormal(this, xtemp2, 250, false));
+                plataformas.add(new PlataformaNormal(this, xtemp2, 250, false, true));
             }
 
             int y = 550;
@@ -140,9 +146,14 @@ public class PlayScreen implements Screen {
                 }
                 int n2 = rdm.nextInt(2);
                 if (n2 == 0) {
-                    plataformas.add(new PlataformaNormal(this, x, y, true)); // primer y 200
+                    n2 = rdm.nextInt(2);
+                    if (n2 == 0) {
+                        plataformas.add(new PlataformaNormal(this, x, y, true, true)); // primer y 200
+                    } else {
+                        plataformas.add(new PlataformaNormal(this, x, y, true, false)); // primer y 200
+                    }
                 } else {
-                    plataformas.add(new PlataformaNormal(this, x, y, false)); // primer y 200
+                    plataformas.add(new PlataformaNormal(this, x, y, false, true)); // primer y 200
                 }
                 y += 250;
             }
@@ -159,22 +170,58 @@ public class PlayScreen implements Screen {
             }
             int n = rdm.nextInt(2);
             if (n == 1) {
-                plataformasnube.add(new PlataformaNube(this, xtemp, 250, true));
+                n = rdm.nextInt(2);
+                if (n == 0) {
+                    plataformasnube.add(new PlataformaNube(this, xtemp2, 250, false, true, "plataformalvl2.png"));
+                } else {
+                    plataformasnube.add(new PlataformaNube(this, xtemp2, 250, false, false, "plataformalvl2.png"));
+                }
             } else {
-                plataformasnube.add(new PlataformaNube(this, xtemp2, 250, false));
+                plataformasnube.add(new PlataformaNube(this, xtemp2, 250, false, false, "plataformalvl2.png"));
             }
 
             int y = 550;
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 8; i++) {
                 int x = 0;
                 while (x < 60) {
                     x = rdm.nextInt(340);
                 }
                 int n2 = rdm.nextInt(2);
                 if (n2 == 1) {
-                    plataformasnube.add(new PlataformaNube(this, x, y, true)); // primer y 200
+                    n2 = rdm.nextInt(2);
+                    if (n2 == 0) {
+                        plataformasnube.add(new PlataformaNube(this, x, y, true, true, "plataformalvl2.png")); // primer
+                                                                                                               // y 200
+                    } else {
+                        plataformasnube.add(new PlataformaNube(this, x, y, true, false, "plataformalvl2.png")); // primer
+                                                                                                                // y 200
+                    }
                 } else {
-                    plataformasnube.add(new PlataformaNube(this, x, y, false)); // primer y 200
+                    plataformasnube.add(new PlataformaNube(this, x, y, false, false, "plataformalvl2.png")); // primer y
+                                                                                                             // 200
+                }
+
+                y += 250;
+            }
+            for (int i = 0; i < 22; i++) {
+                int x = 0;
+                while (x < 60) {
+                    x = rdm.nextInt(340);
+                }
+                int n2 = rdm.nextInt(2);
+                if (n2 == 1) {
+                    n2 = rdm.nextInt(2);
+                    if (n2 == 0) {
+                        plataformasnube.add(new PlataformaNube(this, x, y, true, true, "rocalunar.png")); // primer y
+                                                                                                          // 200
+                    } else {
+                        plataformasnube.add(new PlataformaNube(this, x, y, true, false, "rocalunar.png")); // primer y
+                                                                                                           // 200
+
+                    }
+                } else {
+                    plataformasnube.add(new PlataformaNube(this, x, y, false, true, "rocalunar.png")); // primer y 200
+
                 }
 
                 y += 250;
@@ -194,16 +241,16 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     public void handleInput(float dt) {
 
         // Movimiento
         if (!muerto) {
-            //Si no esta muerto y hay contacto entra
+            // Si no esta muerto y hay contacto entra
             if (contacto.contacto) {
-                //Le quita la velocidad de impulso y le da una nueva, esto se hace para que no se multiplique la velocidad de salto
+                // Le quita la velocidad de impulso y le da una nueva, esto se hace para que no
+                // se multiplique la velocidad de salto
                 prota.b2body.setLinearVelocity(0, 0);
                 prota.b2body.applyLinearImpulse(new Vector2(0, 5.5f), prota.b2body.getWorldCenter(), true);
                 sonido = Main.manager.get("music/SonidoSalto.mp3", Music.class);
@@ -231,12 +278,32 @@ public class PlayScreen implements Screen {
         if (tiempoAcumulado >= intervaloMovimiento) {
             // Mover las plataformas
             if (nivel == 1) {
-                for (PlataformaNormal plataforma : plataformas) {
-                    plataforma.Moviemiento(0.03f); // Aquí sigues utilizando tu lógica de movimiento
+                if (prota.b2body.getPosition().y <= 5f) {
+                    for (PlataformaNormal plataforma : plataformas) {
+                        if (prota.b2body.getPosition().y >= (plataforma.getY() - 5f)) {
+                            plataforma.Moviemiento(0.03f); // Aquí sigues utilizando tu lógica de movimiento
+                        }
+                    }
+                } else {
+                    for (PlataformaNormal plataforma : plataformas) {
+                        if (prota.b2body.getPosition().y >= (plataforma.getY() - 3f)) {
+                            plataforma.Moviemiento(0.03f); // Aquí sigues utilizando tu lógica de movimiento
+                        }
+                    }
                 }
             } else {
-                for (PlataformaNube plataforma : plataformasnube) {
-                    plataforma.Moviemiento(0.03f); // Lo mismo para las plataformas de nube
+                if (prota.b2body.getPosition().y <= 5f) {
+                    for (PlataformaNube plataforma : plataformasnube) {
+                        if (prota.b2body.getPosition().y >= (plataforma.getY() - 5f)) {
+                            plataforma.Moviemiento(0.03f); // Lo mismo para las plataformas de nube
+                        }
+                    }
+                } else {
+                    for (PlataformaNube plataforma : plataformasnube) {
+                        if (prota.b2body.getPosition().y >= (plataforma.getY() - 3f)) {
+                            plataforma.Moviemiento(0.03f); // Lo mismo para las plataformas de nube
+                        }
+                    }
                 }
             }
 
@@ -281,7 +348,6 @@ public class PlayScreen implements Screen {
             gamecam.unproject(touchPos);
             prota.b2body.setTransform(touchPos.x, prota.b2body.getPosition().y, prota.b2body.getAngle());
         }
-
     }
 
     @Override
@@ -313,6 +379,7 @@ public class PlayScreen implements Screen {
         for (int i = 0; i < plataformasnube.size(); i++) {
             plataformasnube.get(i).draw(juego.batch);
         }
+
         juego.batch.end();
         juego.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 

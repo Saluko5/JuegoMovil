@@ -30,6 +30,7 @@ public class Main extends Game {
     //Volumen de la musica antes de mutearse
     public static float volumenanterior = 0;
     public static boolean mute = false;
+    public static boolean giroscopio = true;
 
     //Records de tiempo
     public static float[] recordslvl1 = new float[] { 99999f, 99999f, 99999f, 99999f, 99999f };

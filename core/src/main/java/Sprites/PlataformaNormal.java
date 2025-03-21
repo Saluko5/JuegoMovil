@@ -25,25 +25,38 @@ public class PlataformaNormal extends Sprite {
     boolean movilidad;
     private float desplazamiento = 0f;
     int contador = 0;
-    boolean adelante = true;
-    boolean atras = false;
+    boolean adelante;
+    boolean atras;
 
-    public PlataformaNormal(PlayScreen screen, float x, float y, boolean movilidad) {
+    public PlataformaNormal(PlayScreen screen, float x, float y, boolean movilidad, boolean lado) {
+        // Creación de la textura de la plataforma
         super(new Texture("plataformalvl1.png"), 250, 200);
+        
+        if (lado) {
+            this.adelante = true;  // Se mueve hacia la derecha
+            this.atras = false;
+        } else {
+            this.adelante = false;  // Se mueve hacia la izquierda
+            this.atras = true;
+            desplazamiento = 1f;
+        }
         this.movilidad = movilidad;
         this.screen = screen;
         this.world = screen.getWorld();
         this.x = x;
         this.y = y;
         definePlataforma();
-
+    
         plataformacuerpo = new TextureRegion(getTexture(), 15, 84, 225, 32);
         setBounds(0.1f, 0.1f, 90 / ProtaFinal.PPM, 30 / ProtaFinal.PPM);
         setRegion(plataformacuerpo);
+
     }
 
     protected void definePlataforma() {
         BodyDef bdef = new BodyDef();
+
+        //Creacion de la colision de la plataforma
 
         // Ponemos la posicion del "cuerpo" de lo plataforma
         bdef.position.set(x / ProtaFinal.PPM, y / ProtaFinal.PPM);
@@ -74,30 +87,28 @@ public class PlataformaNormal extends Sprite {
         setRegion(plataformacuerpo);
     }
 
+    //Metodo con el que hago que se muevan las plataformas 
     public void Moviemiento(float cantidad) {
         if (movilidad) {
             if (atras) {
-                b2body.setTransform(new Vector2(b2body.getPosition().x - cantidad,
-                        b2body.getPosition().y),
-                        b2body.getAngle());
+                // Mover hacia la izquierda
+                b2body.setTransform(new Vector2(b2body.getPosition().x - cantidad, b2body.getPosition().y), b2body.getAngle());
                 desplazamiento = desplazamiento - cantidad;
                 if (desplazamiento <= 0) {
                     atras = false;
-                    adelante = true;
+                    adelante = true;  // Cambia de dirección hacia la derecha
                 }
             }
             if (adelante) {
-                b2body.setTransform(new Vector2(b2body.getPosition().x + cantidad,
-                        b2body.getPosition().y),
-                        b2body.getAngle());
+                // Mover hacia la derecha
+                b2body.setTransform(new Vector2(b2body.getPosition().x + cantidad, b2body.getPosition().y), b2body.getAngle());
                 desplazamiento = desplazamiento + cantidad;
                 if (desplazamiento >= 1f) {
                     adelante = false;
-                    atras = true;
+                    atras = true;  // Cambia de dirección hacia la izquierda
                 }
             }
         }
-
     }
 
     public void pisada() {
